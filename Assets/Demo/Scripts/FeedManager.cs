@@ -21,6 +21,10 @@ public class FeedManager : Initializable
     private Vector3 onTouchedPosition;
     private Vector3 currentTouchPosition;
 
+    public GameObject FeedPrefab;
+
+    public Transform CreatedFeed = null;
+
     public override Type Type
     {
         get
@@ -43,9 +47,10 @@ public class FeedManager : Initializable
 
     private void Awake()
     {
-        Installer.GetInstance<ARTouch>().OnTouchDown += FeedManager_OnTouchDown;
-        Installer.GetInstance<ARTouch>().OnTouchUp += FeedManager_OnTouchUp;
-        Installer.GetInstance<ARTouch>().OnTouching += FeedManager_OnTouching;
+        var artouch = Installer.GetInstance<ARTouch>();
+        artouch.OnTouchDown += FeedManager_OnTouchDown;
+        artouch.OnTouchUp += FeedManager_OnTouchUp;
+        artouch.OnTouching += FeedManager_OnTouching;
     }
 
     private void FeedManager_OnTouching( Vector3 touchPosition )
@@ -73,6 +78,12 @@ public class FeedManager : Initializable
         {
             var distnace = ( currentTouchPosition - onTouchedPosition ).magnitude;
         }
+    }
+
+    public void CreateFeed()
+    {
+        var position = Camera.main.ScreenToWorldPoint( new Vector3( Screen.width / 2, 0 , 0.5f ) );
+        CreatedFeed = Instantiate( FeedPrefab, position, Quaternion.identity ).transform;
     }
 
     // 먹이는 이쪽에서 던졌다고 메세지를 쏘는게 좋을거 같다.

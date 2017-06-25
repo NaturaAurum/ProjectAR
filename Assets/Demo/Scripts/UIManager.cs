@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour {
     {
         GetComponent<CanvasScaler>().referenceResolution =
             new Vector2( Screen.width, Screen.height );
+        btnFeed.onClick.AddListener( Feed );
         btnAddChild.onClick.AddListener( AddChild );
     }
 
@@ -28,6 +29,7 @@ public class UIManager : MonoBehaviour {
 
     private void Feed()
     {
-
+        var feedManager = Installer.GetInstance<FeedManager>();
+        feedManager.CreateFeed();
     }
 }
