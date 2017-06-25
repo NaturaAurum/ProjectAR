@@ -4,8 +4,18 @@ using UnityEngine;
 
 public class Feed : MonoBehaviour
 {
+
+    private Rigidbody feedRig;
+
     private void Awake()
     {
-        GetComponent<Rigidbody>().isKinematic = true;
+        feedRig = GetComponent<Rigidbody>();
+        feedRig.isKinematic = true;
+    }
+
+    public void Throw(Vector3 velocity)
+    {
+        feedRig.velocity = velocity/3;
+        feedRig.isKinematic = false;
     }
 }

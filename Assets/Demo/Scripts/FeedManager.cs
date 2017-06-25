@@ -19,11 +19,16 @@ public class FeedManager : Initializable
     private Vector3 prevFeedPosition; // 전에 먹었던 먹이 포지션 혹시 모르니 있는게 좋잖아?
 
     private Vector3 onTouchedPosition;
+    private Vector3 previousTouchPosition;
     private Vector3 currentTouchPosition;
+
+    private Vector3 touchVelocity;
 
     public GameObject FeedPrefab;
 
     public Transform CreatedFeed = null;
+    public Feed CreatedFeedScript = null;
+
 
     public override Type Type
     {
@@ -42,7 +47,7 @@ public class FeedManager : Initializable
 
     public override void Initalize()
     {
-        EventManager.Listen( EventMessage.Feeded, OnFeedDone );
+        EventManager.Listen(EventMessage.Feeded, OnFeedDone);
     }
 
     private void Awake()
@@ -53,37 +58,62 @@ public class FeedManager : Initializable
         artouch.OnTouching += FeedManager_OnTouching;
     }
 
-    private void FeedManager_OnTouching( Vector3 touchPosition )
+    private void FeedManager_OnTouching(Vector3 touchPosition)
     {
         currentTouchPosition = touchPosition;
     }
 
-    private void FeedManager_OnTouchUp( Vector3 touchPosition )
+    private void FeedManager_OnTouchUp(Vector3 touchPosition)
     {
         touched = false;
+        if (CreatedFeed != null)
+        {
+            CreatedFeedScript.Throw(touchVelocity);
+            CreatedFeed = null;
+            CreatedFeedScript = null;
+        }
         onTouchedPosition = Vector3.zero;
     }
 
-    private void FeedManager_OnTouchDown( Vector3 touchPosition )
+    private void FeedManager_OnTouchDown(Vector3 touchPosition)
     {
         touched = true;
         onTouchedPosition = touchPosition;
-        EventManager.Send( EventMessage.Feed, new Vector3( 7f, 0.5f, 11f ) );
+        previousTouchPosition = GetWorldPositionOnPlane(onTouchedPosition, 3f);
+        //EventManager.Send(EventMessage.Feed, new Vector3(7f, 0.5f, 11f));
         //Debug.Log( onTouchedPosition );
     }
 
     private void Update()
     {
-        if (touched)
+        if (touched && CreatedFeed != null)
         {
-            var distnace = ( currentTouchPosition - onTouchedPosition ).magnitude;
+            var result = GetWorldPositionOnPlane(currentTouchPosition, Camera.main.transform.forward.normalized.z);
+            
+            touchVelocity = ((result - previousTouchPosition)) / Time.deltaTime;
+            previousTouchPosition = result;
+            CreatedFeed.position = result;
         }
+    }
+
+    private Vector3 GetWorldPositionOnPlane(Vector3 screenPosition, float z)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+        Plane plane = new Plane(Camera.main.transform.parent.forward, new Vector3(0, 0, z));
+        float distance;
+        plane.Raycast(ray, out distance);
+        return ray.GetPoint(distance);
     }
 
     public void CreateFeed()
     {
-        var position = Camera.main.ScreenToWorldPoint( new Vector3( Screen.width / 2, 0 , 0.5f ) );
-        CreatedFeed = Instantiate( FeedPrefab, position, Quaternion.identity ).transform;
+        if (CreatedFeed != null)
+        {
+            return;
+        }
+        var position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 0.5f));
+        CreatedFeed = Instantiate(FeedPrefab, position, Quaternion.identity).transform;
+        CreatedFeedScript = CreatedFeed.GetComponent<Feed>();
     }
 
     // 먹이는 이쪽에서 던졌다고 메세지를 쏘는게 좋을거 같다.
@@ -93,7 +123,7 @@ public class FeedManager : Initializable
     //    feedPositions.Enqueue( ( Vector3 )args[ 0 ] );
     //}
 
-    private void OnFeedDone( params object[] args )
+    private void OnFeedDone(params object[] args)
     {
         if (feedPositions != null && feedPositions.Count > 0)
         {
@@ -101,7 +131,7 @@ public class FeedManager : Initializable
 
             if (feedPositions.Count > 0)
             {
-                EventManager.Send( EventMessage.Feed, feedPositions.Peek() );
+                EventManager.Send(EventMessage.Feed, feedPositions.Peek());
             }
         }
     }
