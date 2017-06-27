@@ -48,8 +48,10 @@ public class Head : MonoBehaviour
             if (rotateTime <= 1f)
             {
                 rotateTime += Time.deltaTime / RotateEndTime;
-                transform.rotation =
-                    Quaternion.Lerp( fromRotation, toRotation, rotateTime );
+                var targetRotationEuler = Quaternion.Lerp(fromRotation, toRotation, rotateTime).eulerAngles;
+                targetRotationEuler.x = 0f;
+                targetRotationEuler.z = 0f;
+                transform.rotation = Quaternion.Euler(targetRotationEuler);
             }
             else
             {
@@ -59,6 +61,7 @@ public class Head : MonoBehaviour
                 if (( transform.position - feedPositon ).magnitude <= 0.005f)
                 {
                     /// 먹이를 먹는 모션을 해야하지만 일단 이렇게.
+                    rotateTime = 0.0f;
                     EventManager.Send( EventMessage.Feeded );
                     receivedFeed = false;
                 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.XR.iOS;
 
 /// <summary>
 /// 먹이를 던진다!
@@ -88,7 +89,7 @@ public class FeedManager : Initializable
     {
         if (touched && CreatedFeed != null)
         {
-            var result = GetWorldPositionOnPlane(currentTouchPosition, Camera.main.transform.forward.normalized.z);
+            var result = GetWorldPositionOnPlane(currentTouchPosition, Camera.main.nearClipPlane + 0.05f);
             
             touchVelocity = ((result - previousTouchPosition)) / Time.deltaTime;
             previousTouchPosition = result;
@@ -99,7 +100,7 @@ public class FeedManager : Initializable
     private Vector3 GetWorldPositionOnPlane(Vector3 screenPosition, float z)
     {
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
-        Plane plane = new Plane(Camera.main.transform.parent.forward, new Vector3(0, 0, z));
+        Plane plane = new Plane(Camera.main.transform.forward, Camera.main.transform.forward.normalized * z);
         float distance;
         plane.Raycast(ray, out distance);
         return ray.GetPoint(distance);
@@ -111,8 +112,10 @@ public class FeedManager : Initializable
         {
             return;
         }
-        var position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 0.5f));
+        var position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, Camera.main.nearClipPlane + 0.05f));
         CreatedFeed = Instantiate(FeedPrefab, position, Quaternion.identity).transform;
+        CreatedFeed.SetParent(Camera.main.transform);
+        CreatedFeed.localRotation = Quaternion.Euler(Vector3.zero);
         CreatedFeedScript = CreatedFeed.GetComponent<Feed>();
     }
 

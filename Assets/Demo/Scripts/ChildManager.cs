@@ -73,7 +73,7 @@ public class ChildManager : Initializable
 
     public void CreateChild()
     {
-        var child = Instantiate( ChildPrefab, GetLastFamily.position + ( -GetLastFamily.forward ), Quaternion.identity );
+        var child = Instantiate( ChildPrefab, GetLastFamily.position + ( -GetLastFamily.forward.normalized * GetLastFamily.localScale.x * 1.5f ), Quaternion.identity );
         AddChild( child.transform );
     }
 

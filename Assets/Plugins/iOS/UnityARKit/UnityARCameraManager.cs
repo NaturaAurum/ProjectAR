@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.iOS;
 
-public class UnityARCameraManager : MonoBehaviour {
+public class UnityARCameraManager : MonoBehaviour
+{
 
     public Camera m_camera;
     private UnityARSessionNativeInterface m_session;
-	private Material savedClearMaterial;
+    private Material savedClearMaterial;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
 #if !UNITY_EDITOR
 		Application.targetFrameRate = 60;
 		m_session = UnityARSessionNativeInterface.GetARSessionNativeInterface();
@@ -25,36 +27,40 @@ public class UnityARCameraManager : MonoBehaviour {
 			m_camera = Camera.main;
 		}
 #endif
-	}
+    }
 
-	public void SetCamera(Camera newCamera)
-	{
-		if (m_camera != null) {
-			UnityARVideo oldARVideo = m_camera.gameObject.GetComponent<UnityARVideo> ();
-			if (oldARVideo != null) {
-				savedClearMaterial = oldARVideo.m_ClearMaterial;
-				Destroy (oldARVideo);
-			}
-		}
-		SetupNewCamera (newCamera);
-	}
-
-	private void SetupNewCamera(Camera newCamera)
-	{
-		m_camera = newCamera;
-
-        if (m_camera != null) {
-            UnityARVideo unityARVideo = m_camera.gameObject.GetComponent<UnityARVideo> ();
-            if (unityARVideo != null) {
-                savedClearMaterial = unityARVideo.m_ClearMaterial;
-                Destroy (unityARVideo);
+    public void SetCamera(Camera newCamera)
+    {
+        if (m_camera != null)
+        {
+            UnityARVideo oldARVideo = m_camera.gameObject.GetComponent<UnityARVideo>();
+            if (oldARVideo != null)
+            {
+                savedClearMaterial = oldARVideo.m_ClearMaterial;
+                Destroy(oldARVideo);
             }
-            unityARVideo = m_camera.gameObject.AddComponent<UnityARVideo> ();
+        }
+        SetupNewCamera(newCamera);
+    }
+
+    private void SetupNewCamera(Camera newCamera)
+    {
+        m_camera = newCamera;
+
+        if (m_camera != null)
+        {
+            UnityARVideo unityARVideo = m_camera.gameObject.GetComponent<UnityARVideo>();
+            if (unityARVideo != null)
+            {
+                savedClearMaterial = unityARVideo.m_ClearMaterial;
+                Destroy(unityARVideo);
+            }
+            unityARVideo = m_camera.gameObject.AddComponent<UnityARVideo>();
             unityARVideo.m_ClearMaterial = savedClearMaterial;
         }
-	}
+    }
 
-	// Update is called once per frame
+    // Update is called once per frame
 
 #if !UNITY_EDITOR
 	void Update () {
@@ -68,6 +74,15 @@ public class UnityARCameraManager : MonoBehaviour {
             m_camera.projectionMatrix = m_session.GetCameraProjection ();
         }
 
+	}
+
+	void OnGUI(){
+		var localCamPos = m_camera.transform.localPosition;
+		var camPos = m_camera.transform.position;
+		GUI.Box(new Rect(100, 400, 800, 60), 
+		string.Format ("Camera Local Position: x:{0}, y:{1}, z:{2}", localCamPos.x, localCamPos.y, localCamPos.z));
+		GUI.Box(new Rect(100, 500, 800, 60), 
+		string.Format ("Camera Local Position: x:{0}, y:{1}, z:{2}", camPos.x, camPos.y, camPos.z));
 	}
 #endif
 

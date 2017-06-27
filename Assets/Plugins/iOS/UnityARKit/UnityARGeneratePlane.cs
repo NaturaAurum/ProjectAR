@@ -23,9 +23,11 @@ namespace UnityEngine.XR.iOS
         {
             List<ARPlaneAnchorGameObject> arpags = unityARAnchorManager.GetCurrentPlaneAnchors ();
             if (arpags.Count >= 1) {
-                //ARPlaneAnchor ap = arpags [0].planeAnchor;
-                //GUI.Box (new Rect (100, 100, 800, 60), string.Format ("Center: x:{0}, y:{1}, z:{2}", ap.center.x, ap.center.y, ap.center.z));
-                //GUI.Box(new Rect(100, 200, 800, 60), string.Format ("Extent: x:{0}, y:{1}, z:{2}", ap.extent.x, ap.extent.y, ap.extent.z));
+                ARPlaneAnchor ap = arpags [0].planeAnchor;
+                GUI.Box (new Rect (100, 100, 800, 60), string.Format ("Center: x:{0}, y:{1}, z:{2}", ap.center.x, ap.center.y, ap.center.z));
+                GUI.Box(new Rect(100, 200, 800, 60), string.Format ("Extent: x:{0}, y:{1}, z:{2}", ap.extent.x, ap.extent.y, ap.extent.z));
+                var calculatedPos = UnityARMatrixOps.GetPosition(ap.transform);
+                GUI.Box(new Rect(100, 300, 800, 60), string.Format ("Calculated Position: x:{0}, y:{1}, z:{2}", calculatedPos.x, calculatedPos.y, calculatedPos.z));
             }
         }
 	}
