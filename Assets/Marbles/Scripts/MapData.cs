@@ -19,6 +19,10 @@ public class MapDataEditor : Editor
         {
             (target as MapData).GenerateMapData();
         }
+        if (GUILayout.Button("Generate Map"))
+        {
+            (target as MapData).GenerateMap();
+        }
     }
 }
 
@@ -31,6 +35,9 @@ public class MapData : Initializable
     public string SheetUrl;
     private const string sheetNumber = "2076789463";
     public string[][] sheetData;
+
+    public GameObject PlanePrefab;
+    public GameObject BoardPrefab;
 
     [Header("게임 판 크기")]
     public Vector3 StageScale;
@@ -95,25 +102,14 @@ public class MapData : Initializable
         for (int i = 0; i < yLength; ++i)
         {
             string[] ySheet = sheet[i];
-            for (int j = 0; j < xLength - 1; ++j)
+            for (int j = 0; j < xLength; ++j)
             {
-                if (ySheet[j].Equals(ySheet[j + 1]))
+                if (j < xLength - 1 && ySheet[j].Equals(ySheet[j + 1]))
                 {
                     continue;
                 }
                 else
                 {
-                    if (i > 0)
-                    {
-                        var prevYSheet = sheet[i - 1];
-                        if (ySheet[j].Equals(prevYSheet[j]))
-                        {
-                            var data = preBoardData[i - 1, j];
-                            data.endIndex = new int[] { i, j };
-                            preBoardData[i - 1, j] = null;
-                            preBoardData[i, j] = data;
-                        }
-                    }
                     endIndex = new int[] { i, j };
                     BoardData bd = new BoardData();
                     bd.startIndex = startIndex;
@@ -128,10 +124,22 @@ public class MapData : Initializable
                         bd.score = int.Parse(ySheet[j]);
                     }
 
-					Debug.Log(bd.score);
-
                     startIndex = new int[] { i, j + 1 };
                     preBoardData[i, j] = bd;
+                    if (i > 0)
+                    {
+                        var prevYSheet = sheet[i - 1];
+                        if (ySheet[j].Equals(prevYSheet[j]))
+                        {
+                            var data = preBoardData[i - 1, j];
+                            if (data != null)
+                            {
+                                data.endIndex = new int[] { i, j };
+                                preBoardData[i - 1, j] = null;
+                                preBoardData[i, j] = data;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -145,6 +153,42 @@ public class MapData : Initializable
                     boardDatas.Add(preBoardData[i, j]);
                 }
             }
+        }
+    }
+
+    public void GenerateMap()
+    {
+        if (PlanePrefab == null || BoardPrefab == null)
+        {
+            Debug.LogError("ERROR! Not Linked Prefab");
+        }
+
+        var plane = Instantiate(PlanePrefab, Vector3.zero, Quaternion.identity);
+        plane.transform.localScale = StageScale / 1000;
+
+        var xOffset = (StageScale.x) / 2;
+        var zOffset = (StageScale.z) / 2;
+
+        foreach (var data in boardDatas)
+        {
+            var board = Instantiate(BoardPrefab).transform;
+            //board.localScale = new Vector3(StageScale.x / 1000f, 1 / 1000f, StageScale.x / 1000f);
+            //board.SetParent(plane.transform);
+
+            Vector3 boardLocalScale = Vector3.one;
+            if (data.startIndex[0] != data.endIndex[0] && data.endIndex[0] != 0)
+            {
+                boardLocalScale.z = Mathf.Abs((data.startIndex[0] - data.endIndex[0]));
+            }
+            if (data.startIndex[1] != data.endIndex[1] && data.endIndex[1] != 0)
+            {
+                boardLocalScale.x = Mathf.Abs((data.startIndex[1] - data.endIndex[1]));
+            }
+            board.localScale = boardLocalScale;
+			
+            Vector3 boardLocalPosition = Vector3.zero;
+            board.localPosition = boardLocalPosition;
+            //break;
         }
     }
 }

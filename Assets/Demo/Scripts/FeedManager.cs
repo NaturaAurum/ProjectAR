@@ -89,7 +89,9 @@ public class FeedManager : Initializable
     {
         if (touched && CreatedFeed != null)
         {
-            var result = GetWorldPositionOnPlane(currentTouchPosition, Camera.main.nearClipPlane + 0.05f);
+            //var result = GetWorldPositionOnPlane(currentTouchPosition, Camera.main.nearClipPlane + 0.01f);
+            currentTouchPosition.z = Camera.main.nearClipPlane + 0.05f;
+            var result = Camera.main.ScreenToWorldPoint(currentTouchPosition);
             
             touchVelocity = ((result - previousTouchPosition)) / Time.deltaTime;
             previousTouchPosition = result;

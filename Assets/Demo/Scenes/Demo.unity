@@ -1036,8 +1036,180 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SheetUrl: https://docs.google.com/spreadsheets/d/1RQ8ZgNmPU7pobwaAgeW-KOIkJfRKRm2LXFzYk5yaW5s/edit?usp=sharing
-  StageScale: {x: 0, y: 0, z: 0}
-  boardDatas: []
+  PlanePrefab: {fileID: 1039106654844914, guid: 07390f49200304be58bf8da9ce56b749,
+    type: 2}
+  BoardPrefab: {fileID: 1788372781179000, guid: deedea8e7ba894622887f5f7df273ed1,
+    type: 2}
+  StageScale: {x: 12, y: 1, z: 15}
+  boardDatas:
+  - startIndex: 0000000004000000
+    endIndex: 0000000004000000
+    score: 7
+    prefix: 
+  - startIndex: 0000000000000000
+    endIndex: 0100000000000000
+    score: 1
+    prefix: 
+  - startIndex: 0000000001000000
+    endIndex: 0100000003000000
+    score: 0
+    prefix: 
+  - startIndex: 0000000005000000
+    endIndex: 0100000008000000
+    score: 1
+    prefix: 
+  - startIndex: 0000000009000000
+    endIndex: 010000000b000000
+    score: 4
+    prefix: 
+  - startIndex: 010000000c000000
+    endIndex: 0200000000000000
+    score: 8
+    prefix: 
+  - startIndex: 0200000001000000
+    endIndex: 0300000003000000
+    score: 2
+    prefix: '-'
+  - startIndex: 0100000004000000
+    endIndex: 0300000004000000
+    score: 1
+    prefix: '-'
+  - startIndex: 0200000005000000
+    endIndex: 0300000006000000
+    score: 3
+    prefix: 
+  - startIndex: 0200000007000000
+    endIndex: 0300000009000000
+    score: 0
+    prefix: 
+  - startIndex: 020000000a000000
+    endIndex: 030000000b000000
+    score: 2
+    prefix: 
+  - startIndex: 020000000c000000
+    endIndex: 0500000000000000
+    score: 5
+    prefix: '-'
+  - startIndex: 0400000001000000
+    endIndex: 0500000003000000
+    score: 1
+    prefix: 
+  - startIndex: 0400000004000000
+    endIndex: 0500000005000000
+    score: 0
+    prefix: 
+  - startIndex: 0400000007000000
+    endIndex: 0500000008000000
+    score: 2
+    prefix: '-'
+  - startIndex: 0400000009000000
+    endIndex: 050000000b000000
+    score: 3
+    prefix: 
+  - startIndex: 0600000002000000
+    endIndex: 0600000005000000
+    score: 3
+    prefix: '-'
+  - startIndex: 0400000006000000
+    endIndex: 0600000006000000
+    score: 2
+    prefix: 
+  - startIndex: 0600000007000000
+    endIndex: 0600000007000000
+    score: 2
+    prefix: '*'
+  - startIndex: 0700000004000000
+    endIndex: 0700000005000000
+    score: 1
+    prefix: 
+  - startIndex: 060000000a000000
+    endIndex: 070000000b000000
+    score: 5
+    prefix: 
+  - startIndex: 050000000c000000
+    endIndex: 0800000001000000
+    score: 6
+    prefix: '-'
+  - startIndex: 0700000002000000
+    endIndex: 0800000003000000
+    score: 5
+    prefix: 
+  - startIndex: 0600000008000000
+    endIndex: 0800000009000000
+    score: 1
+    prefix: 
+  - startIndex: 0800000004000000
+    endIndex: 0900000005000000
+    score: 2
+    prefix: 
+  - startIndex: 0700000006000000
+    endIndex: 0900000007000000
+    score: 4
+    prefix: '-'
+  - startIndex: 0900000008000000
+    endIndex: 0900000009000000
+    score: 3
+    prefix: '-'
+  - startIndex: 080000000a000000
+    endIndex: 090000000b000000
+    score: 0
+    prefix: 
+  - startIndex: 080000000c000000
+    endIndex: 0a00000001000000
+    score: 1
+    prefix: 
+  - startIndex: 0900000002000000
+    endIndex: 0a00000003000000
+    score: 5
+    prefix: '-'
+  - startIndex: 0a00000004000000
+    endIndex: 0a00000006000000
+    score: 6
+    prefix: 
+  - startIndex: 0a00000008000000
+    endIndex: 0b0000000b000000
+    score: 1
+    prefix: '-'
+  - startIndex: 0a0000000c000000
+    endIndex: 0c00000000000000
+    score: 5
+    prefix: 
+  - startIndex: 0b00000001000000
+    endIndex: 0c00000004000000
+    score: 4
+    prefix: 
+  - startIndex: 0b00000005000000
+    endIndex: 0c00000006000000
+    score: 2
+    prefix: 
+  - startIndex: 0a00000007000000
+    endIndex: 0c00000007000000
+    score: 3
+    prefix: '-'
+  - startIndex: 0c00000008000000
+    endIndex: 0c00000008000000
+    score: 8
+    prefix: 
+  - startIndex: 0d00000005000000
+    endIndex: 0d00000006000000
+    score: 5
+    prefix: 
+  - startIndex: 0d00000007000000
+    endIndex: 0d00000008000000
+    score: 3
+    prefix: '-'
+  - startIndex: 0c0000000c000000
+    endIndex: 0e00000001000000
+    score: 3
+    prefix: 
+  - startIndex: 0d00000002000000
+    endIndex: 0e00000004000000
+    score: 1
+    prefix: 
+  - startIndex: 0c00000009000000
+    endIndex: 0e0000000b000000
+    score: 2
+    prefix: 
 --- !u!4 &1220274520
 Transform:
   m_ObjectHideFlags: 0
@@ -1045,7 +1217,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1220274518}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.038044274, y: 0.07439633, z: -0.04452926}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

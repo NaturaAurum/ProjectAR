@@ -77,12 +77,12 @@ public class UnityARCameraManager : MonoBehaviour
 	}
 
 	void OnGUI(){
-		var localCamPos = m_camera.transform.localPosition;
-		var camPos = m_camera.transform.position;
-		GUI.Box(new Rect(100, 400, 800, 60), 
-		string.Format ("Camera Local Position: x:{0}, y:{1}, z:{2}", localCamPos.x, localCamPos.y, localCamPos.z));
-		GUI.Box(new Rect(100, 500, 800, 60), 
-		string.Format ("Camera Local Position: x:{0}, y:{1}, z:{2}", camPos.x, camPos.y, camPos.z));
+		// var localCamPos = m_camera.transform.localPosition;
+		// var camPos = m_camera.transform.position;
+		// GUI.Box(new Rect(100, 400, 800, 60), 
+		// string.Format ("Camera Local Position: x:{0}, y:{1}, z:{2}", localCamPos.x, localCamPos.y, localCamPos.z));
+		// GUI.Box(new Rect(100, 500, 800, 60), 
+		// string.Format ("Camera Local Position: x:{0}, y:{1}, z:{2}", camPos.x, camPos.y, camPos.z));
 	}
 #endif
 

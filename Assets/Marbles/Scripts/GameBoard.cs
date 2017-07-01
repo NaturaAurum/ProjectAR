@@ -11,4 +11,11 @@ public class GameBoard : MonoBehaviour
 	public string Prefix = "";
 
 	public Color BoardColor = Color.white;
+
+	void Awake()
+	{
+		textMesh = GetComponentInChildren<TMP_Text>();
+
+		textMesh.text = Prefix + Score;
+	}
 }

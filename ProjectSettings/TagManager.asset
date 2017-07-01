@@ -6,6 +6,7 @@ TagManager:
   tags:
   - AR_GeneratedPlane
   - Ground
+  - Destroy
   layers:
   - Default
   - TransparentFX

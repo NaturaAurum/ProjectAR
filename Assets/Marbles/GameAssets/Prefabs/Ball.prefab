@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 54091832980440310}
   - component: {fileID: 114690249174773498}
   m_Layer: 0
-  m_Name: Feed
+  m_Name: Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c6cfca8a986cb141875bf68c9827b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GravityScale: -0.9
+  GravityScale: -0.8
 --- !u!135 &135424419635919758
 SphereCollider:
   m_ObjectHideFlags: 1
