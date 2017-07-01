@@ -44,7 +44,10 @@ namespace ProjectAR.Util.Event
 
     public enum EventMessage
     {
+        // For Demo
         Feed = 0,
         Feeded,
+
+        Thorwed,
     }
 }

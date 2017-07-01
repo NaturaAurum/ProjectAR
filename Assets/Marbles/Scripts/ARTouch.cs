@@ -16,11 +16,30 @@ public class ARTouch : Initializable
         get { return this; }
     }
 
-    public delegate void TouchEvent( Vector3 touchPosition );
+    public delegate void TouchEvent(Vector3 touchPosition);
 
     public event TouchEvent OnTouchDown;
     public event TouchEvent OnTouching;
     public event TouchEvent OnTouchUp;
+
+    public Vector3 GetPosition(Vector3 touchPosition)
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE
+        return GetWorldPositionOnPlane(touchPosition, Camera.main.nearClipPlane + 0.05f);
+#else
+        var pos = new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane + 0.05f);
+        return pos;
+#endif
+    }
+
+    private Vector3 GetWorldPositionOnPlane(Vector3 screenPosition, float z)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+        Plane plane = new Plane(Camera.main.transform.forward, Camera.main.transform.forward.normalized * z);
+        float distance;
+        plane.Raycast(ray, out distance);
+        return ray.GetPoint(distance);
+    }
 
     private void Update()
     {
@@ -30,25 +49,25 @@ public class ARTouch : Initializable
         }
 #if UNITY_EDITOR || UNITY_STANDALONE
         // Mouse Input
-        if (Input.GetMouseButtonDown( 0 ))
+        if (Input.GetMouseButtonDown(0))
         {
             if (OnTouchDown != null)
             {
-                OnTouchDown( Input.mousePosition );
+                OnTouchDown(Input.mousePosition);
             }
         }
-        else if (Input.GetMouseButton( 0 ))
+        else if (Input.GetMouseButton(0))
         {
             if (OnTouching != null)
             {
-                OnTouching( Input.mousePosition );
+                OnTouching(Input.mousePosition);
             }
         }
-        else if (Input.GetMouseButtonUp( 0 ))
+        else if (Input.GetMouseButtonUp(0))
         {
             if (OnTouchUp != null)
             {
-                OnTouchUp( Input.mousePosition );
+                OnTouchUp(Input.mousePosition);
             }
         }
 #else
