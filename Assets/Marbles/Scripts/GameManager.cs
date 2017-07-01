@@ -17,7 +17,7 @@ public class GameManager : Initializable
     public int MaxTurn = 10;
     public int TargetScore = 30;
 
-    private int currentTurn = 0;
+    private int currentTurn = 1;
     private int currentScore = 0;
 
     public TMP_Text TurnText;
@@ -39,6 +39,10 @@ public class GameManager : Initializable
 	void Start(){
 		Installer.GetInstance<FeedManager>().CreateFeed();
 	}
+
+    public void SetTurn(){
+        SetTurn(currentTurn + 1);
+    }
 
     public void SetTurn(int currentTurn)
     {

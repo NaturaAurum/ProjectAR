@@ -19,7 +19,7 @@ public class Feed : MonoBehaviour
     public void Throw(Vector3 velocity)
     {
         var calculatedVelocity = velocity + transform.forward;
-        feedRig.velocity = calculatedVelocity / 3;
+        feedRig.velocity = calculatedVelocity / 2;
         feedRig.isKinematic = false;
         transform.SetParent(null);
     }
@@ -46,5 +46,6 @@ public class Feed : MonoBehaviour
         // }
         Destroy(gameObject);
         Installer.GetInstance<FeedManager>().CreateFeed();
+        Installer.GetInstance<GameManager>().SetTurn();
     }
 }

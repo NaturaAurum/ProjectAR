@@ -90,7 +90,7 @@ public class FeedManager : Initializable
         if (touched && CreatedFeed != null)
         {
             //var result = GetWorldPositionOnPlane(currentTouchPosition, Camera.main.nearClipPlane + 0.01f);
-            currentTouchPosition.z = Camera.main.nearClipPlane + 0.05f;
+            currentTouchPosition.z = Camera.main.nearClipPlane + 0.03f;
             var result = Camera.main.ScreenToWorldPoint(currentTouchPosition);
             
             touchVelocity = ((result - previousTouchPosition)) / Time.deltaTime;
@@ -114,7 +114,7 @@ public class FeedManager : Initializable
         {
             return;
         }
-        var position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, Camera.main.nearClipPlane + 0.05f));
+        var position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 100, Camera.main.nearClipPlane + 0.03f));
         CreatedFeed = Instantiate(FeedPrefab, position, Quaternion.identity).transform;
         CreatedFeed.SetParent(Camera.main.transform);
         CreatedFeed.localRotation = Quaternion.Euler(Vector3.zero);
