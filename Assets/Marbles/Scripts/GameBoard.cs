@@ -12,6 +12,23 @@ public class GameBoard : MonoBehaviour
 
 	public Color BoardColor = Color.white;
 
+	public int GetScore(){
+		int score = 0;
+
+		switch(Prefix){
+			case "-":
+			score = -Score;
+			break;
+			case "+":
+			score = Score;
+			break;
+			case "*":
+			score = Installer.GetInstance<GameManager>().CurrentScore * Score;
+			break;
+		}
+		return score;
+	}
+
 	void Awake()
 	{
 		textMesh = GetComponentInChildren<TMP_Text>();

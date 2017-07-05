@@ -39,6 +39,11 @@ public class Feed : MonoBehaviour
             feedRig.isKinematic = true;
             EventManager.Send(EventMessage.Feed, transform.position);
         }
+
+        if(collision.gameObject.name.Contains("GameBoard")){
+            var board = collision.gameObject.GetComponent<GameBoard>();
+            Installer.GetInstance<GameManager>().SetScore(board.GetScore());
+        }
         // Debug.Log(collision.gameObject.tag);
         // if (collision.gameObject.tag == "Destroy")
         // {

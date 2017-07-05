@@ -19,6 +19,10 @@ public class GameManager : Initializable
 
     private int currentTurn = 1;
     private int currentScore = 0;
+    public int CurrentScore{
+        get{return currentScore;}
+        set{currentScore = value;}
+    }
 
     public TMP_Text TurnText;
     public TMP_Text ScoreText;
@@ -52,7 +56,7 @@ public class GameManager : Initializable
 
     public void SetScore(int currentScore)
     {
-        this.currentScore = currentScore;
+        this.currentScore += currentScore;
         ScoreText.text = string.Format("Score {0} / {1}", currentScore, TargetScore);
     }
 
