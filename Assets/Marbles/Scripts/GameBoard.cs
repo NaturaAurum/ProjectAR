@@ -5,34 +5,40 @@ using TMPro;
 
 public class GameBoard : MonoBehaviour
 {
-	private TMP_Text textMesh;
+    private TMP_Text textMesh;
 
-	public int Score = 0;
-	public string Prefix = "";
+    [SerializeField]
+    private int _Score = 0;
+    public string Prefix = "";
 
-	public Color BoardColor = Color.white;
+    public Color BoardColor = Color.white;
 
-	public int GetScore(){
-		int score = 0;
+    public int Score
+    {
+        get
+        {
+            int score = 0;
 
-		switch(Prefix){
-			case "-":
-			score = -Score;
-			break;
-			case "+":
-			score = Score;
-			break;
-			case "*":
-			score = Installer.GetInstance<GameManager>().CurrentScore * Score;
-			break;
-		}
-		return score;
-	}
+            switch (Prefix)
+            {
+                case "-":
+                    score = -_Score;
+                    break;
+                case "+":
+                    score = _Score;
+                    break;
+                case "*":
+                    score = Installer.GetInstance<GameManager>().CurrentScore * _Score;
+                    break;
+            }
+            return score;
+        }
+    }
 
-	void Awake()
-	{
-		textMesh = GetComponentInChildren<TMP_Text>();
+    void Awake()
+    {
+        textMesh = GetComponentInChildren<TMP_Text>();
 
-		textMesh.text = Prefix + Score;
-	}
+        textMesh.text = Prefix + Score;
+    }
 }

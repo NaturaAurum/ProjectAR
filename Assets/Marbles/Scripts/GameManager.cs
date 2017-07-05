@@ -41,7 +41,8 @@ public class GameManager : Initializable
 	}
 
 	void Start(){
-		Installer.GetInstance<FeedManager>().CreateFeed();
+        //Installer.GetInstance<FeedManager>().CreateFeed();
+        Installer.GetInstance<BallManager>().CreateBall();
 	}
 
     public void SetTurn(){

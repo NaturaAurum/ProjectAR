@@ -404,6 +404,17 @@ Prefab:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 114050724486771218, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: _Score
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 65313567890701312, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 71479362464a34156b45a3df443f18d5,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: deedea8e7ba894622887f5f7df273ed1, type: 2}
   m_IsPrefabParent: 0
@@ -486,6 +497,17 @@ Prefab:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 114050724486771218, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: _Score
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 65313567890701312, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 71479362464a34156b45a3df443f18d5,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: deedea8e7ba894622887f5f7df273ed1, type: 2}
   m_IsPrefabParent: 0
@@ -786,6 +808,17 @@ Prefab:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 114050724486771218, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: _Score
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 65313567890701312, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 71479362464a34156b45a3df443f18d5,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: deedea8e7ba894622887f5f7df273ed1, type: 2}
   m_IsPrefabParent: 0
@@ -1181,12 +1214,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1076052317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f974d191d046604fa39182d127c3899, type: 3}
+  m_Script: {fileID: 11500000, guid: 1649d1602eb2e422f861c8b913b7e0a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FeedPrefab: {fileID: 1221714576255156, guid: 39a07b6dea3174a4f8cd7f95790c6b2b, type: 2}
-  CreatedFeed: {fileID: 0}
-  CreatedFeedScript: {fileID: 0}
+  BallPrefab: {fileID: 1221714576255156, guid: 82746599be454407ca641d1605d1cedc, type: 2}
 --- !u!4 &1076052319
 Transform:
   m_ObjectHideFlags: 0
@@ -1315,6 +1346,17 @@ Prefab:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 114050724486771218, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: _Score
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 65313567890701312, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 71479362464a34156b45a3df443f18d5,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: deedea8e7ba894622887f5f7df273ed1, type: 2}
   m_IsPrefabParent: 0
@@ -1392,6 +1434,17 @@ Prefab:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 114050724486771218, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: _Score
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 65313567890701312, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 71479362464a34156b45a3df443f18d5,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: deedea8e7ba894622887f5f7df273ed1, type: 2}
   m_IsPrefabParent: 0
@@ -1474,6 +1527,17 @@ Prefab:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 114050724486771218, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: _Score
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 65313567890701312, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 71479362464a34156b45a3df443f18d5,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: deedea8e7ba894622887f5f7df273ed1, type: 2}
   m_IsPrefabParent: 0
@@ -1731,6 +1795,17 @@ Prefab:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 114050724486771218, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: _Score
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 65313567890701312, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 71479362464a34156b45a3df443f18d5,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: deedea8e7ba894622887f5f7df273ed1, type: 2}
   m_IsPrefabParent: 0
@@ -1808,6 +1883,17 @@ Prefab:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 114050724486771218, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: _Score
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 65313567890701312, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 71479362464a34156b45a3df443f18d5,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: deedea8e7ba894622887f5f7df273ed1, type: 2}
   m_IsPrefabParent: 0
@@ -2038,6 +2124,17 @@ Prefab:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 114050724486771218, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: _Score
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 65313567890701312, guid: deedea8e7ba894622887f5f7df273ed1,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 71479362464a34156b45a3df443f18d5,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: deedea8e7ba894622887f5f7df273ed1, type: 2}
   m_IsPrefabParent: 0
