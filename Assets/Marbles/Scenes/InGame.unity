@@ -205,6 +205,10 @@ Prefab:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 1039106654844914, guid: 07390f49200304be58bf8da9ce56b749, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 07390f49200304be58bf8da9ce56b749, type: 2}
   m_IsPrefabParent: 0

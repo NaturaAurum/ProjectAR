@@ -43,7 +43,6 @@ public class MapData : Initializable
     public Vector3 StageScale;
 
     private List<string> sheetNumbers = new List<string>();
-
     [SerializeField]
     private List<BoardData> boardDatas = new List<BoardData>();
 
@@ -166,29 +165,43 @@ public class MapData : Initializable
         var plane = Instantiate(PlanePrefab, Vector3.zero, Quaternion.identity);
         plane.transform.localScale = StageScale / 1000;
 
-        var xOffset = (StageScale.x) / 2;
-        var zOffset = (StageScale.z) / 2;
+        var xOffset = (StageScale.x - 2) / 2;
+        var zOffset = (StageScale.z - 2) / 2;
 
         foreach (var data in boardDatas)
         {
             var board = Instantiate(BoardPrefab).transform;
-            //board.localScale = new Vector3(StageScale.x / 1000f, 1 / 1000f, StageScale.x / 1000f);
-            //board.SetParent(plane.transform);
-
-            Vector3 boardLocalScale = Vector3.one;
-            if (data.startIndex[0] != data.endIndex[0] && data.endIndex[0] != 0)
+            board.localScale = new Vector3(StageScale.x / 1000f, 1 / 1000f, StageScale.x / 1000f);
+            board.localScale /= 2;
+            board.SetParent( plane.transform );
+            Vector3 boardLocalScale = board.localScale;
+            if (data.startIndex[0] != data.endIndex[0])
             {
                 boardLocalScale.z = Mathf.Abs((data.startIndex[0] - data.endIndex[0]));
             }
-            if (data.startIndex[1] != data.endIndex[1] && data.endIndex[1] != 0)
+            if (data.startIndex[1] != data.endIndex[1])
             {
                 boardLocalScale.x = Mathf.Abs((data.startIndex[1] - data.endIndex[1]));
             }
             board.localScale = boardLocalScale;
 			
             Vector3 boardLocalPosition = Vector3.zero;
+
+            // 0,0 좌상단으로 만들기.
+            boardLocalPosition.x -= xOffset;
+            boardLocalPosition.z += xOffset;
+
+            // 그다음 EndIndex 따져서 끝으로 옮겨버리고 스케일 체크해서 다시 옮겨주면 얼추 맞을거 같은데?
+            //boardLocalPosition.x = (StageScale.x - 2) - data.endIndex[1]
+            //var width = data.endIndex[ 1 ];
+            //var height = data.endIndex[ 0 ];
+
+            //boardLocalPosition.x += width;
+            //boardLocalPosition.z -= height;
+            //boardLocalPosition.x -= boardLocalScale.x / 2;
+            //boardLocalPosition.z += boardLocalScale.z / 2;
+
             board.localPosition = boardLocalPosition;
-            //break;
         }
     }
 }
