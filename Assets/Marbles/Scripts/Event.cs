@@ -49,5 +49,6 @@ namespace ProjectAR.Util.Event
         Feeded,
 
         Thorwed,
+        ChangeGameState,
     }
 }

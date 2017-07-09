@@ -36,7 +36,7 @@ public class Ball : MonoBehaviour
     private void Update()
     {
         // 멈춘걸로 본다.
-        if (ballRig.velocity.magnitude <= 0.001f)
+        if (ballRig.velocity.magnitude <= 0.005f)
         {
             RaycastHit hitInfo;
             if (Physics.Raycast( transform.position, Vector3.down, out hitInfo ))
@@ -54,14 +54,26 @@ public class Ball : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        if (ballRig != null)
+        {
+            Gizmos.color = Color.blue * Color.cyan;
+            Gizmos.DrawLine( transform.position, transform.position + ballRig.velocity.normalized * 0.1f );
+        }
+    }
+
     private void OnCollisionEnter( Collision collision )
     {
         if (collision.gameObject.name.Contains( "GameBoard" ) && !bounced)
         {
             bounced = true;
             bounceCount++;
-            GravityScale += ( bounceCount + 1 ) / 10f;
-            Debug.Log( GravityScale );
+            var reflect = Vector3.Reflect( ballRig.velocity, collision.contacts[ 0 ].normal );
+            var power = ballRig.mass * ( (bounceCount + 1) / 10f );
+            Debug.Log( power );
+            ballRig.velocity = reflect.normalized * power;
+            Debug.DrawRay( collision.contacts[ 0 ].point, collision.contacts[ 0 ].normal, Color.red, 0.1f );
         }
         if (collision.gameObject.name.Contains( "Destroy" ))
         {
