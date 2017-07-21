@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using System;
 #if UNITY_EDITOR
@@ -39,8 +40,8 @@ public class MapData : Initializable
     public GameObject PlanePrefab;
     public GameObject BoardPrefab;
 
-    [Header( "게임 판 크기" )]
-    public Vector3 StageScale;
+    //[Header( "게임 판 크기" )]
+    //public Vector3 StageScale;
 
     private List<string> sheetNumbers = new List<string>();
     [SerializeField]
@@ -57,7 +58,7 @@ public class MapData : Initializable
     {
         if (sheetNumbers == null || sheetNumbers.Count <= 0)
         {
-            GetGoogleSheet();
+            //GetGoogleSheet();
         }
     }
 
@@ -75,6 +76,8 @@ public class MapData : Initializable
         GenerateMap();
     }
 
+    private Dictionary<int, List<Transform>> boardList = new Dictionary<int, List<Transform>>();
+
     private void GenerateMap()
     {
         if (sheetNumbers == null || sheetNumbers.Count <= 0)
@@ -86,11 +89,14 @@ public class MapData : Initializable
         // j 는 X축
         // i 는 Y축
         Transform boardParent = new GameObject( "BoardParent" ).transform;
+        boardParent.gameObject.AddComponent<AutoMapMerge>();
         for (int i = 0; i < sheet.Length; ++i)
         {
+            Transform parent = new GameObject( i.ToString() ).transform;
+            parent.SetParent( boardParent );
             for (int j = 0; j < sheet[ i ].Length; ++j)
             {
-                var boardObj = Instantiate( BoardPrefab, Vector3.zero, Quaternion.identity, boardParent ).transform;
+                var boardObj = Instantiate( BoardPrefab, Vector3.zero, Quaternion.identity, parent ).transform;
                 var boardXZ = Vector3.zero;
                 var boardScaleX = boardObj.localScale.x;
                 boardXZ.x = ( boardScaleX ) * j;
@@ -111,6 +117,8 @@ public class MapData : Initializable
                 }
             }
         }
+
+        //ParseMapData( sheet );
     }
 
     /// 우선 시트에 있는 데이터가 하나 뿐이니 하나만 가져와서 테스트
@@ -126,72 +134,97 @@ public class MapData : Initializable
     //    //ParseMapData(sheet);
     //}
 
-    //private void ParseMapData(string[][] sheet)
-    //{
-    //    int xLength = sheet[0].Length;
-    //    int yLength = sheet.Length;
+    private void ParseMapData( string[][] sheet )
+    {
+        int xLength = sheet[ 0 ].Length;
+        int yLength = sheet.Length;
 
-    //    int[] startIndex = new int[] { 0, 0 };
-    //    int[] endIndex = new int[] { 0, 0 };
+        //int[] startIndex = new int[] { 0, 0 };
+        //int[] endIndex = new int[] { 0, 0 };
 
-    //    preBoardData = new BoardData[yLength, xLength];
+        //preBoardData = new BoardData[ yLength, xLength ];
 
-    //    for (int i = 0; i < yLength; ++i)
-    //    {
-    //        string[] ySheet = sheet[i];
-    //        for (int j = 0; j < xLength; ++j)
-    //        {
-    //            if (j < xLength - 1 && ySheet[j].Equals(ySheet[j + 1]))
-    //            {
-    //                continue;
-    //            }
-    //            else
-    //            {
-    //                endIndex = new int[] { i, j };
-    //                BoardData bd = new BoardData();
-    //                bd.startIndex = startIndex;
-    //                bd.endIndex = endIndex;
-    //                if (ySheet[j].Length > 1)
-    //                {
-    //                    bd.prefix = ySheet[j][0].ToString();
-    //                    bd.score = int.Parse(ySheet[j][1].ToString());
-    //                }
-    //                else
-    //                {
-    //                    bd.score = int.Parse(ySheet[j]);
-    //                }
+        Transform boardParent = new GameObject( "BoardParent" ).transform;
+        int blockCount = 0;
+        List<Transform> boards = new List<Transform>();
+        //Dictionary<int, List<Transform>> boardList = new Dictionary<int, List<Transform>>();
+        /// Key는 Board 오브젝트, Value는 부모로 쓰일 번호
+        //Transform[] prevBoards = new Transform[ xLength ];
+        List<Transform> prevBoards = new List<Transform>();
+        Dictionary<Transform, Transform> boardList = new Dictionary<Transform, Transform>();
+        for (int i = 0; i < yLength; ++i)
+        {
+            string[] ySheet = sheet[ i ];
+            for (int j = 0; j < xLength; ++j)
+            {
+                if (j < xLength - 1 && ySheet[ j ].Equals( ySheet[ j + 1 ] ))
+                {
+                    var boardObj = Instantiate( BoardPrefab, Vector3.zero, Quaternion.identity, boardParent ).transform;
+                    var boardXZ = Vector3.zero;
+                    var boardScaleX = boardObj.localScale.x;
+                    boardXZ.x = ( boardScaleX ) * j;
+                    boardXZ.z = ( -boardScaleX ) * i;
+                    boardObj.position = boardXZ;
 
-    //                startIndex = new int[] { i, j + 1 };
-    //                preBoardData[i, j] = bd;
-    //                if (i > 0)
-    //                {
-    //                    var prevYSheet = sheet[i - 1];
-    //                    if (ySheet[j].Equals(prevYSheet[j]))
-    //                    {
-    //                        var data = preBoardData[i - 1, j];
-    //                        if (data != null)
-    //                        {
-    //                            data.endIndex = new int[] { i, j };
-    //                            preBoardData[i - 1, j] = null;
-    //                            preBoardData[i, j] = data;
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
+                    GameBoard board = boardObj.GetComponent<GameBoard>();
 
-    //    for (int i = 0; i < yLength; ++i)
-    //    {
-    //        for (int j = 0; j < xLength; ++j)
-    //        {
-    //            if (preBoardData[i, j] != null)
-    //            {
-    //                boardDatas.Add(preBoardData[i, j]);
-    //            }
-    //        }
-    //    }
-    //}
+                    string boardScore = sheet[ i ][ j ];
+                    if (boardScore.Length > 1)
+                    {
+                        board.Prefix = boardScore[ 0 ].ToString();
+                        board.Score = int.Parse( boardScore[ 1 ].ToString() );
+                    }
+                    else
+                    {
+                        board.Score = int.Parse( boardScore[ 0 ].ToString() );
+                    }
+
+                    boards.Add( boardObj );
+                }
+                else
+                {
+
+                    if (i > 0)
+                    {
+                        var prevYSheet = sheet[ i - 1 ];
+                        Transform parent = null;
+                        if (ySheet[ j ].Equals( prevYSheet[ j ] ))
+                        {
+                            parent = boardList[ prevBoards[ j * i ] ];
+                        }
+
+                        if (parent)
+                        {
+                            foreach (var board in boards)
+                            {
+                                boardList.Add( board, parent );
+                            }
+                            continue;
+                        }
+                    }
+                    blockCount++;
+
+                    var block = new GameObject( blockCount.ToString() );
+                    block.transform.SetParent( boardParent );
+
+                    foreach (var board in boards)
+                    {
+                        boardList.Add( board, block.transform );
+                    }
+
+                    prevBoards.AddRange( boards.ToArray() );
+                    boards = new List<Transform>();
+                }
+            }
+
+            //prevBoards = new List<Transform>();
+        }
+
+        foreach (var b in boardList)
+        {
+            b.Key.SetParent( b.Value );
+        }
+    }
 
     //public void GenerateMap()
     //{
