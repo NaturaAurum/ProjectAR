@@ -5,7 +5,7 @@ using TMPro;
 
 #if UNITY_EDITOR
 using UnityEditor;
-[CustomEditor(typeof(GameBoard))]
+[CustomEditor( typeof( GameBoard ) )]
 public class GameBoardEditor : Editor
 {
     private void OnEnable()
@@ -35,15 +35,17 @@ public class GameBoard : MonoBehaviour
                 case "-":
                     score = -_Score;
                     break;
-                case "+":
-                    score = _Score;
-                    break;
                 case "*":
                     score = Installer.GetInstance<GameManager>().CurrentScore * _Score;
+                    break;
+                default:
+                    score = _Score;
                     break;
             }
             return score;
         }
+
+        set { _Score = value; }
     }
     public void SetScore()
     {
@@ -52,16 +54,16 @@ public class GameBoard : MonoBehaviour
             textMesh = GetComponentInChildren<TMP_Text>();
         }
 
-        textMesh.text = Prefix + Score;
+        textMesh.text = Prefix + _Score;
     }
 
     public string GetScore()
     {
-        return Prefix + Score;
+        return Prefix + _Score;
     }
 
-	void Awake()
-	{
+    void Awake()
+    {
         SetScore();
-	}
+    }
 }

@@ -115,6 +115,9 @@ public class MapData : Initializable
                 {
                     board.Score = int.Parse( boardScore[ 0 ].ToString() );
                 }
+
+                board.SetScore();
+                boardObj.tag = "Ground";
             }
         }
 

@@ -32,6 +32,14 @@ public class Installer : MonoBehaviour
 
     public static T GetInstance<T>() where T : Initializable
     {
-        return instance.GetInstanceWithType<T>();
+        try
+        {
+            return instance.GetInstanceWithType<T>();
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.Log( e.Data );
+            return null;
+        }
     }
 }

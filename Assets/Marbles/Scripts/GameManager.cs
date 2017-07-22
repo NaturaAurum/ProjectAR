@@ -87,9 +87,9 @@ public class GameManager : Initializable
         TurnText.text = string.Format( "Turn {0} / {1}", currentTurn, MaxTurn );
     }
 
-    public void SetScore( int currentScore )
+    public void SetScore( int score )
     {
-        this.currentScore += currentScore;
+        this.currentScore += score;
         ScoreText.text = string.Format( "Score {0} / {1}", currentScore, TargetScore );
     }
 
