@@ -52,6 +52,8 @@ public class GameManager : Initializable
 
     public Transform SampleGameMap;
 
+    private BallManager ballManager;
+
     public override void Initalize()
     {
         arSession = UnityARSessionNativeInterface.GetARSessionNativeInterface();
@@ -64,6 +66,11 @@ public class GameManager : Initializable
     {
         SampleGameMap.position = UnityARMatrixOps.GetPosition( anchor.transform );
         UnityARSessionNativeInterface.ARAnchorAddedEvent -= AR_AnchorAdded;
+    }
+
+    private void Awake()
+    {
+        ballManager = Installer.GetInstance<BallManager>();
     }
 
     void Start()
@@ -81,10 +88,27 @@ public class GameManager : Initializable
         }
     }
 
-    public void SetTurn( int currentTurn )
+    public void ResetGame()
     {
-        this.currentTurn = currentTurn;
+        SetTurn( 1 );
+        currentScore = 0;
+        SetScore( 0 );
+        ballManager.CreateBall();
+    }
+
+    public void SetTurn( int turn )
+    {
+        this.currentTurn = turn;
+        if (turn > MaxTurn)
+        {
+            return;
+        }
         TurnText.text = string.Format( "Turn {0} / {1}", currentTurn, MaxTurn );
+    }
+
+    public bool CanCreateBall()
+    {
+        return currentTurn != MaxTurn && currentScore < TargetScore;
     }
 
     public void SetScore( int score )
@@ -95,7 +119,7 @@ public class GameManager : Initializable
 
     void Update()
     {
-        if (currentScore >= TargetScore || currentTurn >= MaxTurn)
+        if (currentScore >= TargetScore || currentTurn > MaxTurn)
         {
             // Game Over
             ChangeGameState( State.GameOver );

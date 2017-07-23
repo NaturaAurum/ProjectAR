@@ -12,7 +12,10 @@ namespace Assets.Marbles.Scripts
         private Button retryBtn;
         private Button menuBtn;
 
+        [SerializeField]
         private GameObject gameOverObjectParent;
+
+        private GameManager gameManager;
 
         private void Awake()
         {
@@ -24,12 +27,15 @@ namespace Assets.Marbles.Scripts
 
             EventManager.Listen( EventMessage.ChangeGameState, OnGameStateChanged );
 
-            gameOverObjectParent = GameObject.Find( "GameOver" );
+            gameManager = Installer.GetInstance<GameManager>();
+
+            //gameOverObjectParent = GameObject.Find( "GameOver" );
         }
 
         void Retry()
         {
-            SceneManager.LoadScene( "InGame" );
+            gameManager.ResetGame();
+            gameManager.ChangeGameState( GameManager.State.Play );
         }
 
         void GotoMenu()

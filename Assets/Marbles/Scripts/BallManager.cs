@@ -82,7 +82,7 @@ public class BallManager : Initializable
 
     public void CreateBall()
     {
-        if (createdBall != null || gameManager.IsState( GameManager.State.GameOver ))
+        if (createdBall != null || !gameManager.CanCreateBall())
         {
             return;
         }
