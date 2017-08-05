@@ -117,6 +117,7 @@ public class MapData : Initializable
                 }
 
                 board.SetScore();
+				board.Index = i + "," + j;
                 boardObj.tag = "Ground";
             }
         }

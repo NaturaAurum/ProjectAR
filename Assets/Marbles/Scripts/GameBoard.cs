@@ -23,6 +23,8 @@ public class GameBoard : MonoBehaviour
     private int _Score = 0;
     public string Prefix = "";
 
+	public string Index = "";
+
     public Color BoardColor = Color.white;
     public int Score
     {

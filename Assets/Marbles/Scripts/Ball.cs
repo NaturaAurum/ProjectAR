@@ -27,14 +27,17 @@ public class Ball : MonoBehaviour
         transform.SetParent( null );
     }
 
-    private void FixedUpdate()
-    {
-        var gravity = new Vector3( 0, GravityScale, 0 );
-        ballRig.AddForce( gravity * ballRig.mass );
-    }
+    // private void FixedUpdate()
+    // {
+    //     var gravity = new Vector3( 0, GravityScale, 0 );
+    //     ballRig.AddForce( gravity * ballRig.mass );
+    // }
 
     private void Update()
     {
+        var gravity = new Vector3( 0, GravityScale, 0 );
+        ballRig.AddForce( gravity * ballRig.mass );
+
         // 멈춘걸로 본다.
         if (ballRig.velocity.magnitude <= 0.005f)
         {
