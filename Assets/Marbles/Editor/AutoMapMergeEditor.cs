@@ -28,7 +28,7 @@ public class AutoMapMergeEditor : Editor
             var columnCount = boardParent.GetChild(row).childCount;
             var rowParent = boardParent.GetChild(row);
             for (int column = 0; column < columnCount; ++column)
-			//for (int column = columnCount - 1; column >= 0; --column)
+            //for (int column = columnCount - 1; column >= 0; --column)
             {
                 /*if (columnCount == 1) {
 					
@@ -47,7 +47,7 @@ public class AutoMapMergeEditor : Editor
             }
         }
         //mergeTool.PrintBoard();
-		mergeTool.ArrangementBoard();
+        mergeTool.ArrangementBoard();
     }
 }
 
@@ -106,12 +106,24 @@ public class MergeTools
 
     public void ArrangementBoard()
     {
-		foreach(var boards in boardData){
-			GameObject parent = new GameObject(boards.Key.ToString());
-			foreach(var board in boards.Value.GetBoardList()){
-				board.transform.SetParent(parent.transform);
-			}
-		}
+        foreach (var boards in boardData)
+        {
+            GameObject parent = new GameObject(boards.Key.ToString());
+            foreach (var board in boards.Value.GetBoardList())
+            {
+                board.transform.SetParent(parent.transform);
+            }
+        }
+    }
+
+    public void Merge()
+    {
+        foreach(var boards in boardData)
+        {
+            var boardList = boards.Value.GetBoardList();
+            var parent = boardList[0].transform.parent;
+            
+        }
     }
 }
 
@@ -159,9 +171,10 @@ public class GameBoardList
         int xDiff = Mathf.Abs(x1 - x2);
         int yDiff = Mathf.Abs(y1 - y2);
 
-		if(xDiff > 1 || yDiff > 1){
-			return false;
-		}
+        if (xDiff > 1 || yDiff > 1)
+        {
+            return false;
+        }
         return (xDiff ^ yDiff) == 1; // 1아면 근접해있는 거다.
     }
 }
