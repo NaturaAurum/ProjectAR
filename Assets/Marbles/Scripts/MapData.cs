@@ -5,16 +5,16 @@ using UnityEngine;
 using System;
 #if UNITY_EDITOR
 using UnityEditor;
-[CustomEditor( typeof( MapData ) )]
+[CustomEditor(typeof(MapData))]
 public class MapDataEditor : Editor
 {
 
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        if (GUILayout.Button( "Get Google Sheet Data" ))
+        if (GUILayout.Button("Get Google Sheet Data"))
         {
-            ( target as MapData ).GetGoogleSheet();
+            (target as MapData).GetGoogleSheet();
         }
         //if (GUILayout.Button("Generate Map Data"))
         //{
@@ -32,9 +32,9 @@ public class MapDataEditor : Editor
 public class MapData : Initializable
 {
     // 링크로만 공유되어있는 구글 스프레드시트 링크 ( 읽기 전용 )
-    [Header( "스프레드 시트 링크 ( 읽기전용 & 링크전용 )" )]
+    [Header("스프레드 시트 링크 ( 읽기전용 & 링크전용 )")]
     public string SheetUrl;
-    private const string sheetNumber = "2076789463";
+    private const string sheetNumber = "2076789463"; // sheetNumbers Data
     public string[][] sheetData;
 
     public GameObject PlanePrefab;
@@ -44,6 +44,9 @@ public class MapData : Initializable
     //public Vector3 StageScale;
 
     private List<string> sheetNumbers = new List<string>();
+
+    private Dictionary<string, string> sheetDatas = new Dictionary<string, string>();
+
     [SerializeField]
     private List<BoardData> boardDatas = new List<BoardData>();
 
@@ -64,13 +67,12 @@ public class MapData : Initializable
 
     public void GetGoogleSheet()
     {
-        sheetData = GoSheet.GetGoogleSheet( SheetUrl, sheetNumber );
+        sheetData = GoSheet.GetGoogleSheet(SheetUrl, sheetNumber);
+        sheetDatas.Clear();
         for (int i = 0; i < sheetData.Length; ++i)
         {
-            for (int j = 0; j < sheetData[ i ].Length; ++j)
-            {
-                sheetNumbers.Add( sheetData[ i ][ j ] );
-            }
+            //sheetNumbers.Add( sheetData[ i ][ j ] );]
+            sheetDatas.Add(sheetData[i][0], sheetData[i][1]);
         }
 
         GenerateMap();
@@ -80,44 +82,46 @@ public class MapData : Initializable
 
     private void GenerateMap()
     {
-        if (sheetNumbers == null || sheetNumbers.Count <= 0)
+        if (sheetDatas == null || sheetDatas.Count <= 0)
         {
             GetGoogleSheet();
         }
 
-        string[][] sheet = GoSheet.GetGoogleSheet( SheetUrl, sheetNumbers[ 1 ] );
+        string[][] sheet = GoSheet.GetGoogleSheet(SheetUrl, sheetDatas["Stage_0"]);
         // j 는 X축
         // i 는 Y축
-        Transform boardParent = new GameObject( "BoardParent" ).transform;
+        Transform boardParent = new GameObject("BoardParent").transform;
         boardParent.gameObject.AddComponent<AutoMapMerge>();
         for (int i = 0; i < sheet.Length; ++i)
         {
-            Transform parent = new GameObject( i.ToString() ).transform;
-            parent.SetParent( boardParent );
-            for (int j = 0; j < sheet[ i ].Length; ++j)
+            Transform parent = new GameObject(i.ToString()).transform;
+            parent.SetParent(boardParent);
+            for (int j = 0; j < sheet[i].Length; ++j)
             {
-                var boardObj = Instantiate( BoardPrefab, Vector3.zero, Quaternion.identity, parent ).transform;
+                var boardObj = Instantiate(BoardPrefab, Vector3.zero, Quaternion.identity, parent).transform;
                 var boardXZ = Vector3.zero;
                 var boardScaleX = boardObj.localScale.x;
-                boardXZ.x = ( boardScaleX ) * j;
-                boardXZ.z = ( -boardScaleX ) * i;
+                boardXZ.x = (boardScaleX) * j;
+                boardXZ.z = (-boardScaleX) * i;
                 boardObj.position = boardXZ;
 
                 GameBoard board = boardObj.GetComponent<GameBoard>();
 
-                string boardScore = sheet[ i ][ j ];
-                if (boardScore.Length > 1)
+                string boardScore = sheet[i][j];
+                if (boardScore.Length > 2)
                 {
-                    board.Prefix = boardScore[ 0 ].ToString();
-                    board.Score = int.Parse( boardScore[ 1 ].ToString() );
+                    board.Prefix = boardScore[0].ToString();
+                    board.Score = int.Parse(boardScore[1].ToString());
+                    board.colorCode = boardScore[2].ToString();
                 }
                 else
                 {
-                    board.Score = int.Parse( boardScore[ 0 ].ToString() );
+                    board.Score = int.Parse(boardScore[0].ToString());
+                    board.colorCode = boardScore[1].ToString();
                 }
 
                 board.SetScore();
-				board.Index = i + "," + j;
+                board.Index = i + "," + j;
                 boardObj.tag = "Ground";
             }
         }
@@ -138,9 +142,9 @@ public class MapData : Initializable
     //    //ParseMapData(sheet);
     //}
 
-    private void ParseMapData( string[][] sheet )
+    private void ParseMapData(string[][] sheet)
     {
-        int xLength = sheet[ 0 ].Length;
+        int xLength = sheet[0].Length;
         int yLength = sheet.Length;
 
         //int[] startIndex = new int[] { 0, 0 };
@@ -148,7 +152,7 @@ public class MapData : Initializable
 
         //preBoardData = new BoardData[ yLength, xLength ];
 
-        Transform boardParent = new GameObject( "BoardParent" ).transform;
+        Transform boardParent = new GameObject("BoardParent").transform;
         int blockCount = 0;
         List<Transform> boards = new List<Transform>();
         //Dictionary<int, List<Transform>> boardList = new Dictionary<int, List<Transform>>();
@@ -158,65 +162,65 @@ public class MapData : Initializable
         Dictionary<Transform, Transform> boardList = new Dictionary<Transform, Transform>();
         for (int i = 0; i < yLength; ++i)
         {
-            string[] ySheet = sheet[ i ];
+            string[] ySheet = sheet[i];
             for (int j = 0; j < xLength; ++j)
             {
-                if (j < xLength - 1 && ySheet[ j ].Equals( ySheet[ j + 1 ] ))
+                if (j < xLength - 1 && ySheet[j].Equals(ySheet[j + 1]))
                 {
-                    var boardObj = Instantiate( BoardPrefab, Vector3.zero, Quaternion.identity, boardParent ).transform;
+                    var boardObj = Instantiate(BoardPrefab, Vector3.zero, Quaternion.identity, boardParent).transform;
                     var boardXZ = Vector3.zero;
                     var boardScaleX = boardObj.localScale.x;
-                    boardXZ.x = ( boardScaleX ) * j;
-                    boardXZ.z = ( -boardScaleX ) * i;
+                    boardXZ.x = (boardScaleX) * j;
+                    boardXZ.z = (-boardScaleX) * i;
                     boardObj.position = boardXZ;
 
                     GameBoard board = boardObj.GetComponent<GameBoard>();
 
-                    string boardScore = sheet[ i ][ j ];
+                    string boardScore = sheet[i][j];
                     if (boardScore.Length > 1)
                     {
-                        board.Prefix = boardScore[ 0 ].ToString();
-                        board.Score = int.Parse( boardScore[ 1 ].ToString() );
+                        board.Prefix = boardScore[0].ToString();
+                        board.Score = int.Parse(boardScore[1].ToString());
                     }
                     else
                     {
-                        board.Score = int.Parse( boardScore[ 0 ].ToString() );
+                        board.Score = int.Parse(boardScore[0].ToString());
                     }
 
-                    boards.Add( boardObj );
+                    boards.Add(boardObj);
                 }
                 else
                 {
 
                     if (i > 0)
                     {
-                        var prevYSheet = sheet[ i - 1 ];
+                        var prevYSheet = sheet[i - 1];
                         Transform parent = null;
-                        if (ySheet[ j ].Equals( prevYSheet[ j ] ))
+                        if (ySheet[j].Equals(prevYSheet[j]))
                         {
-                            parent = boardList[ prevBoards[ j * i ] ];
+                            parent = boardList[prevBoards[j * i]];
                         }
 
                         if (parent)
                         {
                             foreach (var board in boards)
                             {
-                                boardList.Add( board, parent );
+                                boardList.Add(board, parent);
                             }
                             continue;
                         }
                     }
                     blockCount++;
 
-                    var block = new GameObject( blockCount.ToString() );
-                    block.transform.SetParent( boardParent );
+                    var block = new GameObject(blockCount.ToString());
+                    block.transform.SetParent(boardParent);
 
                     foreach (var board in boards)
                     {
-                        boardList.Add( board, block.transform );
+                        boardList.Add(board, block.transform);
                     }
 
-                    prevBoards.AddRange( boards.ToArray() );
+                    prevBoards.AddRange(boards.ToArray());
                     boards = new List<Transform>();
                 }
             }
@@ -226,7 +230,7 @@ public class MapData : Initializable
 
         foreach (var b in boardList)
         {
-            b.Key.SetParent( b.Value );
+            b.Key.SetParent(b.Value);
         }
     }
 

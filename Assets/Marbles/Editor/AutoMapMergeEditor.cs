@@ -8,6 +8,10 @@ using System.Linq;
 [CustomEditor(typeof(AutoMapMerge))]
 public class AutoMapMergeEditor : Editor
 {
+    void OnEnable()
+    {
+        AssetNameAttribute.ConnectMemberAssets(target);
+    }
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -21,6 +25,7 @@ public class AutoMapMergeEditor : Editor
     private void MergeGameBoard()
     {
         MergeTools mergeTool = new MergeTools();
+        mergeTool.BoardPrefab = (target as AutoMapMerge).GameBoardPrefab;
         var boardParent = (target as AutoMapMerge).transform;
         var rowCount = boardParent.childCount;
         for (int row = 0; row < rowCount; ++row)
@@ -55,6 +60,8 @@ public class MergeTools
 {
     private Dictionary<int, GameBoardList> boardData;
     private int boardCount = 0;
+
+    public GameObject BoardPrefab = null;
 
     public MergeTools()
     {
@@ -104,11 +111,35 @@ public class MergeTools
         }
     }
 
+    private Vector3 GetCenterOfBoard(params GameBoard[] boards)
+    {
+        var center = Vector3.zero;
+
+        if (boards.Length == 1)
+        {
+            center = boards[0].transform.position;
+        }
+        else
+        {
+            var bounds = new Bounds(boards[0].transform.position,
+                                        Vector3.zero);
+            for (int i = 1; i < boards.Length; ++i)
+            {
+                bounds.Encapsulate(boards[i].transform.position);
+            }
+            center = bounds.center;
+        }
+        return center;
+    }
+
+
     public void ArrangementBoard()
     {
         foreach (var boards in boardData)
         {
             GameObject parent = new GameObject(boards.Key.ToString());
+            var parentCenter = this.GetCenterOfBoard(boards.Value.GetBoardList().ToArray());
+            parent.transform.position = parentCenter;
             foreach (var board in boards.Value.GetBoardList())
             {
                 board.transform.SetParent(parent.transform);
@@ -118,11 +149,18 @@ public class MergeTools
 
     public void Merge()
     {
-        foreach(var boards in boardData)
+        foreach (var boards in boardData)
         {
             var boardList = boards.Value.GetBoardList();
             var parent = boardList[0].transform.parent;
-            
+            var mergedBoard = (GameObject.Instantiate<GameObject>(BoardPrefab, parent.position, Quaternion.identity, parent)).GetComponent<GameBoard>();
+            mergedBoard.CopyBoard(boardList[0]);
+            // xDiff, yDiff를 돌면서 체크해보면? xDiffCount올리다가 yDiffCount올라가면 xDiffCount는 0으로 초기화 시카면 결국 크기가 구해지지 않을까?
+            int xDiffCount = 1;
+            int yDiffCount = 1;
+            for(int i = 0; i < boardList.Count - 1; ++i){
+                
+            }
         }
     }
 }
@@ -145,7 +183,8 @@ public class GameBoardList
     {
         foreach (var _b in boardList)
         {
-            if ((_b.GetScore() == board.GetScore()) && this.IsNearBoard(_b.Index, board.Index))
+            if ((_b.GetScore() == board.GetScore()) && this.IsNearBoard(_b.Index, board.Index) &&
+                    this.IsSameColor(_b.colorCode, board.colorCode))
             {
                 return true;
             }
@@ -156,6 +195,11 @@ public class GameBoardList
     public List<GameBoard> GetBoardList()
     {
         return boardList;
+    }
+
+    private bool IsSameColor(string colorCode0, string colorCode1)
+    {
+        return colorCode0.Equals(colorCode1);
     }
 
     private bool IsNearBoard(string index1, string index2)

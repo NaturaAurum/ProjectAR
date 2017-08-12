@@ -19,11 +19,20 @@ public class GameBoard : MonoBehaviour
 {
     private TMP_Text textMesh;
 
-    [SerializeField]
-    private int _Score = 0;
+    //[SerializeField]
+    public int _Score = 0;
     public string Prefix = "";
 
 	public string Index = "";
+
+    public string colorCode = "";
+
+    public void CopyBoard(GameBoard board){
+        // 합쳐져 있는 애들은 Index필요 없다. 쓸일이 있을까?
+        Prefix = board.Prefix;
+        colorCode = board.colorCode;
+        _Score = board._Score;
+    }
 
     public Color BoardColor = Color.white;
     public int Score

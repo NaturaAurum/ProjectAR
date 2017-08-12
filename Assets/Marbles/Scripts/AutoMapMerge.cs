@@ -2,4 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AutoMapMerge : MonoBehaviour { }
+public class AutoMapMerge : MonoBehaviour
+{
+    [AssetName("GameBoard.prefab")]
+    public GameObject GameBoardPrefab;
+}
