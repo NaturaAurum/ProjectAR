@@ -1,0 +1,34 @@
+using UnityEngine;
+using System.Collections;
+using System;
+
+namespace ProjectAR.Assets.Marbles.Scripts
+{
+    public static class Extensions
+    {
+        public static class ColorExtensions
+        {
+            public static string ColorToHex(Color color)
+            {
+                Color32 color32 = color;
+                return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", color32.r, color32.g, color32.b, color32.a);
+            }
+
+            public static Color HexToColor(string hex)
+            {
+                hex = hex.Replace("0x", "");//in case the string is formatted 0xFFFFFF
+                hex = hex.Replace("#", "");//in case the string is formatted #FFFFFF
+                byte a = 255;//assume fully visible unless specified in hex
+                byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+                byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+                byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+                //Only use alpha if the string has enough characters
+                if (hex.Length == 8)
+                {
+                    a = byte.Parse(hex.Substring(6, 2), System.Globalization.NumberStyles.HexNumber);
+                }
+                return new Color32(r, g, b, a);
+            }
+        }
+    }
+}
