@@ -48,11 +48,12 @@ public class AutoMapMergeEditor : Editor
 						
 					}
 				}*/
-                mergeTool.AddBoard(rowParent.GetChild(column).GetComponent<GameBoard>());
+                mergeTool.AddBoard(rowParent.GetChild(column).GetComponentInChildren<GameBoard>());
             }
         }
         //mergeTool.PrintBoard();
         mergeTool.ArrangementBoard();
+        mergeTool.Merge();
     }
 }
 
@@ -142,7 +143,7 @@ public class MergeTools
             parent.transform.position = parentCenter;
             foreach (var board in boards.Value.GetBoardList())
             {
-                board.transform.SetParent(parent.transform);
+                board.transform.parent.SetParent(parent.transform);
             }
         }
     }
@@ -152,16 +153,59 @@ public class MergeTools
         foreach (var boards in boardData)
         {
             var boardList = boards.Value.GetBoardList();
-            var parent = boardList[0].transform.parent;
-            var mergedBoard = (GameObject.Instantiate<GameObject>(BoardPrefab, parent.position, Quaternion.identity, parent)).GetComponent<GameBoard>();
+            var parent = boardList[0].transform.parent.parent;
+            var mergedBoard = (GameObject.Instantiate<GameObject>(BoardPrefab, parent.position, Quaternion.identity, parent)).GetComponentInChildren<GameBoard>();
             mergedBoard.CopyBoard(boardList[0]);
             // xDiff, yDiff를 돌면서 체크해보면? xDiffCount올리다가 yDiffCount올라가면 xDiffCount는 0으로 초기화 시카면 결국 크기가 구해지지 않을까?
             int xDiffCount = 1;
             int yDiffCount = 1;
-            for(int i = 0; i < boardList.Count - 1; ++i){
-                
+            if(boardList.Count == 1){
+                boardList[0].transform.parent.gameObject.SetActive(false);
             }
+            for (int i = 0; i < boardList.Count - 1; ++i)
+            {
+                var board = boardList[i];
+                var nextBoard = boardList[i + 1];
+                if (IsNearX(board.Index, nextBoard.Index))
+                {
+                    xDiffCount++;
+                }
+                if (IsNearY(board.Index, nextBoard.Index))
+                {
+                    xDiffCount = 1;
+                    yDiffCount++;
+                }
+                board.transform.parent.gameObject.SetActive(false);
+                nextBoard.transform.parent.gameObject.SetActive(false);
+            }
+
+            var boardScale = mergedBoard.transform.localScale;
+            boardScale.x *= xDiffCount;
+            boardScale.z *= yDiffCount;
+            mergedBoard.transform.localScale = boardScale;
+            mergedBoard.SetScore();
+            mergedBoard.SetColor();
+            //mergedBoard.SetTextUIFixScale();
         }
+    }
+
+    private bool IsNearX(string index1, string index2)
+    {
+        var splited_0 = index1.Split(',');
+        var splited_1 = index2.Split(',');
+
+        int x1 = int.Parse(splited_0[1]);
+        int x2 = int.Parse(splited_1[1]);
+        return Mathf.Abs(x1 - x2) == 1;
+    }
+
+    private bool IsNearY(string index1, string index2)
+    {
+        var splited_0 = index1.Split(',');
+        var splited_1 = index2.Split(',');
+        int y1 = int.Parse(splited_0[0]);
+        int y2 = int.Parse(splited_1[0]);
+        return Mathf.Abs(y1 - y2) == 1;
     }
 }
 
@@ -219,7 +263,7 @@ public class GameBoardList
         {
             return false;
         }
-        return (xDiff ^ yDiff) == 1; // 1아면 근접해있는 거다.
+        return (xDiff ^ yDiff) == 1; // 1이면 근접해있는 거다.
     }
 }
 #endif

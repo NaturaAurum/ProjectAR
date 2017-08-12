@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class AutoMapMerge : MonoBehaviour
 {
-    [AssetName("GameBoard.prefab")]
+    [AssetName("GameBoardParent.prefab")]
     public GameObject GameBoardPrefab;
 }

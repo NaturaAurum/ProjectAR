@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using ProjectAR.Assets.Marbles.Scripts;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -19,6 +20,10 @@ public class GameBoard : MonoBehaviour
 {
     private TMP_Text textMesh;
 
+    private Material boardMaterial;
+
+    public MapData mapData;
+
     //[SerializeField]
     public int _Score = 0;
     public string Prefix = "";
@@ -32,6 +37,7 @@ public class GameBoard : MonoBehaviour
         Prefix = board.Prefix;
         colorCode = board.colorCode;
         _Score = board._Score;
+        mapData = board.mapData;
     }
 
     public Color BoardColor = Color.white;
@@ -62,10 +68,14 @@ public class GameBoard : MonoBehaviour
     {
         if (!textMesh)
         {
-            textMesh = GetComponentInChildren<TMP_Text>();
+            textMesh = transform.parent.GetComponentInChildren<TMP_Text>();
         }
 
         textMesh.text = Prefix + _Score;
+    }
+
+    public void SetTextUIFixScale(){
+
     }
 
     public string GetScore()
@@ -73,8 +83,16 @@ public class GameBoard : MonoBehaviour
         return Prefix + _Score;
     }
 
+    public void SetColor(){
+        if(boardMaterial == null){
+            boardMaterial = GetComponent<Renderer>().material;
+        }
+        boardMaterial.SetColor("_Color", mapData.GetColorOfBoard(colorCode));
+    }
+
     void Awake()
     {
         SetScore();
+        SetColor();
     }
 }

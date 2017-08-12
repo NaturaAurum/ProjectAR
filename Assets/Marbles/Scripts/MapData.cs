@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
+using ProjectAR.Assets.Marbles.Scripts;
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 [CustomEditor(typeof(MapData))]
@@ -46,6 +49,7 @@ public class MapData : Initializable
     private List<string> sheetNumbers = new List<string>();
 
     private Dictionary<string, string> sheetDatas = new Dictionary<string, string>();
+    private Dictionary<string, string> mapColorDatas = new Dictionary<string, string>();
 
     [SerializeField]
     private List<BoardData> boardDatas = new List<BoardData>();
@@ -76,6 +80,19 @@ public class MapData : Initializable
         }
 
         GenerateMap();
+        GetMapColorData();
+    }
+
+    public Color GetColorOfBoard(string key){
+        return Extensions.ColorExtensions.HexToColor(mapColorDatas[key]);
+    }
+
+    private void GetMapColorData(){
+        mapColorDatas.Clear();
+        string[][] sheet = GoSheet.GetGoogleSheet(SheetUrl, sheetDatas["ColorCode"]);
+        for(int i = 1; i < sheet.Length; ++i){
+            mapColorDatas.Add(sheet[i][0], sheet[i][1]);
+        }
     }
 
     private Dictionary<int, List<Transform>> boardList = new Dictionary<int, List<Transform>>();
@@ -105,7 +122,7 @@ public class MapData : Initializable
                 boardXZ.z = (-boardScaleX) * i;
                 boardObj.position = boardXZ;
 
-                GameBoard board = boardObj.GetComponent<GameBoard>();
+                GameBoard board = boardObj.GetComponentInChildren<GameBoard>();
 
                 string boardScore = sheet[i][j];
                 if (boardScore.Length > 2)
@@ -186,7 +203,7 @@ public class MapData : Initializable
                     {
                         board.Score = int.Parse(boardScore[0].ToString());
                     }
-
+                    board.mapData = this;
                     boards.Add(boardObj);
                 }
                 else
