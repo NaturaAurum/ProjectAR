@@ -12,6 +12,7 @@ public class GameBoardEditor : Editor
     private void OnEnable()
     {
         ( target as GameBoard ).SetScore();
+        ( target as GameBoard ).SetColor();
     }
 }
 #endif
@@ -20,7 +21,10 @@ public class GameBoard : MonoBehaviour
 {
     private TMP_Text textMesh;
 
-    private Material boardMaterial;
+
+    [SerializeField]
+    private MeshRenderer meshRenderer;
+    private MaterialPropertyBlock materialProperty;
 
     public MapData mapData;
 
@@ -28,11 +32,12 @@ public class GameBoard : MonoBehaviour
     public int _Score = 0;
     public string Prefix = "";
 
-	public string Index = "";
+    public string Index = "";
 
     public string colorCode = "";
 
-    public void CopyBoard(GameBoard board){
+    public void CopyBoard( GameBoard board )
+    {
         // 합쳐져 있는 애들은 Index필요 없다. 쓸일이 있을까?
         Prefix = board.Prefix;
         colorCode = board.colorCode;
@@ -74,20 +79,22 @@ public class GameBoard : MonoBehaviour
         textMesh.text = Prefix + _Score;
     }
 
-    public void SetTextUIFixScale(){
-
-    }
-
     public string GetScore()
     {
         return Prefix + _Score;
     }
 
-    public void SetColor(){
-        if(boardMaterial == null){
-            boardMaterial = GetComponent<Renderer>().material;
+    public void SetColor()
+    {
+        if(materialProperty == null)
+        {
+            materialProperty = new MaterialPropertyBlock();
+            meshRenderer = GetComponent<MeshRenderer>();
         }
-        boardMaterial.SetColor("_Color", mapData.GetColorOfBoard(colorCode));
+
+        meshRenderer.GetPropertyBlock( materialProperty );
+        materialProperty.SetColor( "_Color", ( mapData.GetColorOfBoard( colorCode ) ) );
+        meshRenderer.SetPropertyBlock( materialProperty );
     }
 
     void Awake()

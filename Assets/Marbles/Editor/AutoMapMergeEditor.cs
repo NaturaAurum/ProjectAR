@@ -54,6 +54,8 @@ public class AutoMapMergeEditor : Editor
         //mergeTool.PrintBoard();
         mergeTool.ArrangementBoard();
         mergeTool.Merge();
+
+        Object.DestroyImmediate( ( target as AutoMapMerge ).gameObject );
     }
 }
 
@@ -150,11 +152,21 @@ public class MergeTools
 
     public void Merge()
     {
+        var newParent = new GameObject( "Stage" ).transform;
+        Vector3 parentPos = Vector3.zero;
+        List<GameBoard> gameBoards = new List<GameBoard>();
+        foreach(var boards in boardData)
+        {
+            gameBoards.AddRange( boards.Value.GetBoardList() );
+        }
+
+        parentPos = GetCenterOfBoard( gameBoards.ToArray() );
+        newParent.position = parentPos;
         foreach (var boards in boardData)
         {
             var boardList = boards.Value.GetBoardList();
-            var parent = boardList[0].transform.parent.parent;
-            var mergedBoard = (GameObject.Instantiate<GameObject>(BoardPrefab, parent.position, Quaternion.identity, parent)).GetComponentInChildren<GameBoard>();
+            var parent = boardList[ 0 ].transform.parent.parent;
+            var mergedBoard = ( GameObject.Instantiate<GameObject>( BoardPrefab, parent.position, Quaternion.identity, newParent ) ).GetComponentInChildren<GameBoard>();
             mergedBoard.CopyBoard(boardList[0]);
             // xDiff, yDiff를 돌면서 체크해보면? xDiffCount올리다가 yDiffCount올라가면 xDiffCount는 0으로 초기화 시카면 결국 크기가 구해지지 않을까?
             int xDiffCount = 1;
@@ -185,6 +197,7 @@ public class MergeTools
             mergedBoard.transform.localScale = boardScale;
             mergedBoard.SetScore();
             mergedBoard.SetColor();
+            Object.DestroyImmediate( parent.gameObject );
             //mergedBoard.SetTextUIFixScale();
         }
     }

@@ -136,7 +136,7 @@ public class MapData : Initializable
                     board.Score = int.Parse(boardScore[0].ToString());
                     board.colorCode = boardScore[1].ToString();
                 }
-
+                board.mapData = this;
                 board.SetScore();
                 board.Index = i + "," + j;
                 boardObj.tag = "Ground";
