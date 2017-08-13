@@ -21,7 +21,7 @@ public class Ball : MonoBehaviour
     public void Throw( Vector3 velocity )
     {
         var calculatedVelocity = velocity + transform.forward;
-        ballRig.AddForce(calculatedVelocity * 0.45f, ForceMode.Impulse);
+        ballRig.AddForce(calculatedVelocity, ForceMode.Impulse);
         ballRig.isKinematic = false;
         transform.SetParent( null );
     }
