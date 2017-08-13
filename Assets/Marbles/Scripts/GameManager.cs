@@ -57,7 +57,7 @@ public class GameManager : Initializable
     public override void Initalize()
     {
         arSession = UnityARSessionNativeInterface.GetARSessionNativeInterface();
-        UnityARSessionNativeInterface.ARAnchorAddedEvent += AR_AnchorAdded;
+        //UnityARSessionNativeInterface.ARAnchorAddedEvent += AR_AnchorAdded;
 
         //ChangeGameState( State.Play );
     }
