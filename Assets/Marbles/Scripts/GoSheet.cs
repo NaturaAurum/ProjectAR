@@ -9,6 +9,15 @@ public static class GoSheet
 
     public static string[][] GetGoogleSheet(string url, string gid = "0")
     {
+#if UNITY_EDITOR
+        return GetGoogleSheetWebClient(url, gid);
+#else
+		return GetGoogleSheetNative(url, gid);
+#endif
+    }
+
+    public static string[][] GetGoogleSheetWebClient(string url, string gid = "0")
+    {
         ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
         using (var client = new WebClient())
         {

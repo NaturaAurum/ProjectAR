@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[DefaultExecutionOrder(-999)]
+//[DefaultExecutionOrder(-999)]
 public class Installer : MonoBehaviour
 {
     private static Installer instance = null;

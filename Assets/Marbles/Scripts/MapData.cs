@@ -43,7 +43,7 @@ public class MapData : Initializable
 {
     // 링크로만 공유되어있는 구글 스프레드시트 링크 ( 읽기 전용 )
     [Header("스프레드 시트 링크 ( 읽기전용 & 링크전용 )")]
-    public string SheetUrl;
+    public const string SheetUrl = "https://docs.google.com/spreadsheets/d/1RQ8ZgNmPU7pobwaAgeW-KOIkJfRKRm2LXFzYk5yaW5s/edit?usp=sharing";
     private const string sheetNumber = "2076789463"; // sheetNumbers Data
     public string[][] sheetData;
 
@@ -69,13 +69,17 @@ public class MapData : Initializable
         sheetDatas.Clear();
         for (int i = 0; i < sheetData.Length; ++i)
         {
-            //sheetNumbers.Add( sheetData[ i ][ j ] );]
+            Debug.Log(sheetData[i][0] + "," + sheetData[i][1]);
             sheetDatas.Add(sheetData[i][0], sheetData[i][1]);
         }
     }
 
     public Color GetColorOfBoard(string key)
     {
+        if(!mapColorDatas.ContainsKey(key)){
+            Debug.Log(key + " is not exist on map color data dictionary");
+            Debug.Log( "Dictionary info : " + mapColorDatas.Count);
+        }
         return Extensions.ColorExtensions.HexToColor(mapColorDatas[key]);
     }
 

@@ -16,6 +16,10 @@ public class Stage : MonoBehaviour
     void ARAnchorAdded(ARPlaneAnchor anchor)
     {
 		var planePos = UnityARMatrixOps.GetPosition(anchor.transform);
+		var planeRot = UnityARMatrixOps.GetRotation(anchor.transform);
+		planePos.y += 0.15f;
+		transform.position = planePos;
+		transform.rotation = planeRot;
 		Debug.Log("Camera to first plane : " + (Camera.main.transform.position - planePos).magnitude);
 		UnityARSessionNativeInterface.ARAnchorAddedEvent -= ARAnchorAdded;	
     }
