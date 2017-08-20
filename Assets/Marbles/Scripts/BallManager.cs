@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ProjectAR.Util.Event;
 using UnityEngine;
 
+[DefaultExecutionOrder(+1000)]
 public class BallManager : Initializable
 {
 
@@ -16,6 +17,12 @@ public class BallManager : Initializable
     public override void Initalize()
     {
         //EventManager.Listen(EventMessage.Thorwed,)
+        var arTouch = Installer.GetInstance<ARTouch>();
+        arTouch.OnTouchDown += OnTouchDown;
+        arTouch.OnTouching += OnTouching;
+        arTouch.OnTouchUp += OnTouchUp;
+
+        gameManager = Installer.GetInstance<GameManager>();
     }
 
     private bool touched = false;
@@ -33,12 +40,7 @@ public class BallManager : Initializable
 
     private void Awake()
     {
-        var arTouch = Installer.GetInstance<ARTouch>();
-        arTouch.OnTouchDown += OnTouchDown;
-        arTouch.OnTouching += OnTouching;
-        arTouch.OnTouchUp += OnTouchUp;
-
-        gameManager = Installer.GetInstance<GameManager>();
+        
     }
 
     private void OnTouchDown( Vector3 touchPosition )

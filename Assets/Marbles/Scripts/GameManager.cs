@@ -54,12 +54,18 @@ public class GameManager : Initializable
 
     private BallManager ballManager;
 
+    
+
     public override void Initalize()
     {
         arSession = UnityARSessionNativeInterface.GetARSessionNativeInterface();
         //UnityARSessionNativeInterface.ARAnchorAddedEvent += AR_AnchorAdded;
 
         //ChangeGameState( State.Play );
+         ballManager = Installer.GetInstance<BallManager>();        
+        Installer.GetInstance<BallManager>().CreateBall();
+        ChangeGameState( State.Play );
+        
     }
 
     void AR_AnchorAdded( ARPlaneAnchor anchor )
@@ -70,14 +76,12 @@ public class GameManager : Initializable
 
     private void Awake()
     {
-        ballManager = Installer.GetInstance<BallManager>();
+        
     }
 
     void Start()
     {
         //Installer.GetInstance<FeedManager>().CreateFeed();
-        Installer.GetInstance<BallManager>().CreateBall();
-        ChangeGameState( State.Play );
     }
 
     public void SetTurn()

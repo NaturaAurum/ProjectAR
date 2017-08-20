@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using ProjectAR.Util.Event;
+using System;
 
 namespace Assets.Marbles.Scripts
 {
-    public class UIManager : MonoBehaviour
+    [DefaultExecutionOrder(+9999)]
+    public class UIManager : Initializable
     {
 
         private Button retryBtn;
@@ -17,25 +19,33 @@ namespace Assets.Marbles.Scripts
 
         private GameManager gameManager;
 
-        private void Awake()
+        public override Type Type { get { return GetType(); } }
+
+        public override object Instance { get { return this; } }
+
+        public override void Initalize()
         {
-            retryBtn = GameObject.Find( "RetryBtn" ).GetComponent<Button>();
-            menuBtn = GameObject.Find( "MenuBtn" ).GetComponent<Button>();
 
-            retryBtn.onClick.AddListener( Retry );
-            menuBtn.onClick.AddListener( GotoMenu );
+            retryBtn = GameObject.Find("RetryBtn").GetComponent<Button>();
+            menuBtn = GameObject.Find("MenuBtn").GetComponent<Button>();
 
-            EventManager.Listen( EventMessage.ChangeGameState, OnGameStateChanged );
+            retryBtn.onClick.AddListener(Retry);
+            menuBtn.onClick.AddListener(GotoMenu);
+
+            EventManager.Listen(EventMessage.ChangeGameState, OnGameStateChanged);
 
             gameManager = Installer.GetInstance<GameManager>();
 
-            //gameOverObjectParent = GameObject.Find( "GameOver" );
+        }
+        private void Awake()
+        {
+
         }
 
         void Retry()
         {
             gameManager.ResetGame();
-            gameManager.ChangeGameState( GameManager.State.Play );
+            gameManager.ChangeGameState(GameManager.State.Play);
         }
 
         void GotoMenu()
@@ -45,17 +55,17 @@ namespace Assets.Marbles.Scripts
 
         private void UI_On()
         {
-            gameOverObjectParent.SetActive( true );
+            gameOverObjectParent.SetActive(true);
         }
 
         private void UI_Off()
         {
-            gameOverObjectParent.SetActive( false );
+            gameOverObjectParent.SetActive(false);
         }
 
         private void OnGameStateChanged(params object[] args)
         {
-            var state = ( GameManager.State )args[ 0 ];
+            var state = (GameManager.State)args[0];
             switch (state)
             {
                 case GameManager.State.GameOver:

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.iOS;
 using UnityEngine.UI;
+using System.Linq;
 
 public class Stage : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class Stage : MonoBehaviour
     void Awake()
     {
         UnityARSessionNativeInterface.ARAnchorAddedEvent += ARAnchorAdded;
+        for(int i = 0; i <transform.childCount; ++i){
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
     }
 
     void ARAnchorAdded(ARPlaneAnchor anchor)
@@ -29,6 +33,32 @@ public class Stage : MonoBehaviour
         transform.rotation = planeRot;
         Debug.Log("Camera to first plane : " + (Camera.main.transform.position - planePos).magnitude);
         UnityARSessionNativeInterface.ARAnchorAddedEvent -= ARAnchorAdded;
+    }
+
+    public float WaitTimePerBoard = 0.05f;
+
+    public IEnumerator StageLoadAnimation()
+    {
+        System.Random random = new System.Random((int)System.DateTime.Now.Ticks);
+        int[] indexList = Enumerable.Range(0, transform.childCount).OrderBy(o => random.Next()).ToArray();
+        for(int i = 0; i < indexList.Length; ++i){
+            StartCoroutine(BlockLoadAnimation(transform.GetChild(i)));
+            yield return new WaitForSeconds(WaitTimePerBoard);
+        }
+    }
+
+    public AnimationCurve BoardAnimation;
+    public float BoardAnimationEndTime = 0f;
+
+    public IEnumerator BlockLoadAnimation(Transform block){
+        var t = 0f;
+        var startScale = new Vector3(0.2f, 0.0f, 0.2f);
+        var targetScale = new Vector3(0.2f, 0.4f, 0.2f);
+        while(t < 1f){
+            yield return 0f;
+            t = Mathf.Lerp(0, 1f, t + Time.deltaTime / BoardAnimationEndTime);
+            transform.localScale = Vector3.Lerp(startScale, targetScale, t);
+        }
     }
 
     /// <summary>

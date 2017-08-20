@@ -10,34 +10,68 @@ public class MenuUI : MonoBehaviour
     public CustomButton singleButton;
     public CustomButton multiButton;
     public GameObject MultiOption;
+    [SerializeField]
     private CustomButton[] multiButtons;
+    private CustomButton backButton;
+
+    private PlayData dataInstance;
 
     private void Awake()
     {
-        MultiOption.SetActive(false);
         var optionCount = MultiOption.transform.childCount;
-        multiButtons = new CustomButton[optionCount];
-        for(int i = 0; i < optionCount; ++i){
+        multiButtons = new CustomButton[optionCount - 1];
+        for(int i = 0; i < optionCount - 1; ++i){
             multiButtons[i] = MultiOption.transform.GetChild(i).GetComponent<CustomButton>();
-            multiButtons[i].OnClick.AddListener(SelectMulti);
+            multiButtons[i].AddListener(SelectMulti);
         }
 
-        singleButton.OnClick.AddListener(DoSingle);
-        multiButton.OnClick.AddListener(DoMulti);
+        backButton = MultiOption.transform.GetChild(MultiOption.transform.childCount - 1).GetComponent<CustomButton>();
+        backButton.AddListener(DoBack);
+
+        singleButton.AddListener(DoSingle);
+        multiButton.AddListener(DoMulti);
+
+        MultiOption.SetActive(false);
     }
 
-    private void DoSingle()
+    /// <summary>
+    /// Start is called on the frame when a script is enabled just before
+    /// any of the Update methods is called the first time.
+    /// </summary>
+    void Start()
     {
-        
+        dataInstance = Installer.GetInstance<PlayData>();
     }
 
-    private void DoMulti()
+    private void DoSingle(GameObject sender)
     {
+        // TODO : Single Mode
+        dataInstance.PlayerCount = 1;
+        LoadIngameScene();
+    }
 
+    private void DoMulti(GameObject sender)
+    {
+        MultiOption.SetActive(true);
+        singleButton.gameObject.SetActive(false);
+        multiButton.gameObject.SetActive(false);
+    }
+
+    private void DoBack(GameObject sender){
+        MultiOption.SetActive(false);
+        singleButton.gameObject.SetActive(true);
+        multiButton.gameObject.SetActive(true);
+    }
+
+    void LoadIngameScene(){
+        //Fader.Instance.FadeIn(0.6f).LoadLevel("InGame").FadeOut(0.6f);
+        SquaredScreenFader.Instance.FadeIn(0.6f).LoadLevel("InGame").FadeOut(0.6f);
     }
 
     private void SelectMulti(GameObject sender)
     {
-
+        var number = int.Parse(sender.name);
+        dataInstance.PlayerCount = number;
+        LoadIngameScene();
     }
 }

@@ -6,17 +6,20 @@ using ProjectAR.Assets.Marbles.Scripts;
 
 #if UNITY_EDITOR
 using UnityEditor;
-[CustomEditor( typeof( GameBoard ) )]
+[CustomEditor(typeof(GameBoard))]
 public class GameBoardEditor : Editor
 {
     private void OnEnable()
     {
-        ( target as GameBoard ).SetScore();
-        ( target as GameBoard ).SetColor();
+        if (!Application.isPlaying)
+        {
+            (target as GameBoard).SetScore();
+            (target as GameBoard).SetColor();
+        }
     }
 }
 #endif
-
+[DefaultExecutionOrder(999)]
 public class GameBoard : MonoBehaviour
 {
     private TMP_Text textMesh;
@@ -36,7 +39,7 @@ public class GameBoard : MonoBehaviour
 
     public string colorCode = "";
 
-    public void CopyBoard( GameBoard board )
+    public void CopyBoard(GameBoard board)
     {
         // 합쳐져 있는 애들은 Index필요 없다. 쓸일이 있을까?
         Prefix = board.Prefix;
@@ -86,15 +89,15 @@ public class GameBoard : MonoBehaviour
 
     public void SetColor()
     {
-        if(materialProperty == null)
+        if (materialProperty == null)
         {
             materialProperty = new MaterialPropertyBlock();
             meshRenderer = GetComponent<MeshRenderer>();
         }
 
-        meshRenderer.GetPropertyBlock( materialProperty );
-        materialProperty.SetColor( "_Color", ( mapData.GetColorOfBoard( colorCode ) ) );
-        meshRenderer.SetPropertyBlock( materialProperty );
+        meshRenderer.GetPropertyBlock(materialProperty);
+        materialProperty.SetColor("_Color", (mapData.GetColorOfBoard(colorCode)));
+        meshRenderer.SetPropertyBlock(materialProperty);
     }
 
     void Awake()
