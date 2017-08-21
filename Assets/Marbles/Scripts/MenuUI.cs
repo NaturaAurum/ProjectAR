@@ -47,6 +47,7 @@ public class MenuUI : MonoBehaviour
     {
         // TODO : Single Mode
         dataInstance.PlayerCount = 1;
+        dataInstance.gameMode = PlayData.GameMode.Single;
         LoadIngameScene();
     }
 
@@ -65,13 +66,21 @@ public class MenuUI : MonoBehaviour
 
     void LoadIngameScene(){
         //Fader.Instance.FadeIn(0.6f).LoadLevel("InGame").FadeOut(0.6f);
-        SquaredScreenFader.Instance.FadeIn(0.6f).LoadLevel("InGame").FadeOut(0.6f);
+        Fader.Instance.FadeIn(0.6f).LoadLevel("InGame").FadeOut(0.6f);
     }
 
     private void SelectMulti(GameObject sender)
     {
         var number = int.Parse(sender.name);
-        dataInstance.PlayerCount = number;
+        //dataInstance.PlayerCount = number;
+        if(number == 2)
+        {
+            dataInstance.gameMode = PlayData.GameMode.OneVsOne;
+        }
+        else if(number == 4)
+        {
+            dataInstance.gameMode = PlayData.GameMode.TwoVsTwo;
+        }
         LoadIngameScene();
     }
 }
