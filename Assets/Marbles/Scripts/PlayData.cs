@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class PlayerData{
+	public string Name;
+	public int Score;
+	public int Turn;
+}
+
 public class PlayData : Initializable
 {
     public override Type Type { get { return GetType(); } }
@@ -13,6 +19,8 @@ public class PlayData : Initializable
     {
         DontDestroyOnLoad(gameObject);
     }
+
+	public List<PlayerData> Players;
 
 	public int PlayerCount = 1;
 	public GameMode gameMode;

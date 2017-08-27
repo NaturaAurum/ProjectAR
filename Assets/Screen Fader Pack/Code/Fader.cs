@@ -11,6 +11,7 @@ using ScreenFaderComponents;
 using ScreenFaderComponents.Actions;
 using ScreenFaderComponents.Enumerators;
 using ScreenFaderComponents.Events;
+using UnityEngine.SceneManagement;
 
 
 public class Fader : MonoBehaviour, IFader
@@ -198,6 +199,28 @@ public class Fader : MonoBehaviour, IFader
             pActionParameters = new object[] { name }
         });
         return Instance;
+    }
+
+    public IFader LoadLevel(int index, LoadSceneMode mode, bool unloadPrev = true)
+    {
+        AddTask(new FaderTask()
+        {
+            State = FadeState.Stop,
+            pAction = new LoadSceneAction(),
+            pActionParameters = new object[] { index, mode, unloadPrev }
+        });
+        return instance;
+    }
+
+    public IFader LoadLevel(string name, LoadSceneMode mode, bool unloadPrev = true)
+    {
+        AddTask(new FaderTask()
+        {
+            State = FadeState.Stop,
+            pAction = new LoadSceneAction(),
+            pActionParameters = new object[] { name, mode, unloadPrev }
+        });
+        return instance;
     }
     /// <summary>
     /// Add any action to the fadings chain. 
@@ -599,6 +622,9 @@ public interface IFader
     /// </summary>
     /// <param name="name">Level name</param>
     IFader LoadLevel(string name);
+
+    IFader LoadLevel(int index, LoadSceneMode mode, bool unloadPrev = true);
+    IFader LoadLevel(string name, LoadSceneMode mode, bool unloadPrev = true);
     /// <summary>
     /// Change color of fading
     /// </summary>
@@ -1092,10 +1118,36 @@ namespace ScreenFaderComponents
                 string value = args[0].ToString();
                 int index = 0;
 
-                if (Int32.TryParse(value, out index))
-                    Application.LoadLevel(index);
-                else
-                    Application.LoadLevel(value);
+                LoadSceneMode mode = LoadSceneMode.Single;
+                bool unloadPrev = false;
+                if(args.Length > 1){
+                    mode = (LoadSceneMode)args[1];
+                    unloadPrev = (bool)args[2];
+                }
+
+                // if (Int32.TryParse(value, out index))
+                //     Application.LoadLevel(index);
+                // else
+                //     Application.LoadLevel(value);
+
+                if(unloadPrev){
+                    //var scenes = SceneManager.GetAllScenes();
+                    var sceneCount = SceneManager.sceneCount;
+                    for(int i = 0; i < sceneCount; ++i){
+                        var scene = SceneManager.GetSceneAt(i);
+                        if(!scene.name.Contains("Base")){
+                            var async = SceneManager.UnloadSceneAsync(scene);
+                            while(!async.isDone){}
+                        }
+                    }
+                }
+
+                if(Int32.TryParse(value, out index)){
+                    SceneManager.LoadScene(index, mode);
+                }
+                else{
+                    SceneManager.LoadScene(value, mode);
+                }
 
                 Completed = true;
             }

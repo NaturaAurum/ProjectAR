@@ -19,9 +19,14 @@ namespace Assets.Marbles.Scripts
 
         private GameManager gameManager;
 
+        [SerializeField]
+        private HorizontalLayoutGroup horizontalLayoutGroup;
+
         public override Type Type { get { return GetType(); } }
 
         public override object Instance { get { return this; } }
+
+        public bool MultipleUIMode = true;
 
         public override void Initalize()
         {
@@ -39,7 +44,38 @@ namespace Assets.Marbles.Scripts
         }
         private void Awake()
         {
+            if (MultipleUIMode)
+            {
+                if (horizontalLayoutGroup == null)
+                {
+                    horizontalLayoutGroup = GetComponentInChildren<HorizontalLayoutGroup>();
+                }
+                List<Transform> playerInfos = new List<Transform>();
+                foreach (Transform child in horizontalLayoutGroup.transform)
+                {
+                    child.gameObject.SetActive(false);
+                    playerInfos.Add(child);
+                }
 
+                switch (Installer.GetInstance<PlayData>().gameMode)
+                {
+                    case PlayData.GameMode.Single:
+                        playerInfos[0].gameObject.SetActive(true);
+                        break;
+                    case PlayData.GameMode.OneVsOne:
+                        playerInfos[0].gameObject.SetActive(true);
+                        playerInfos[1].gameObject.SetActive(true);
+                        break;
+                    case PlayData.GameMode.TwoVsTwo:
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            playerInfos[i].gameObject.SetActive(true);
+                        }
+                        break;
+                }
+
+                horizontalLayoutGroup.SetLayoutHorizontal();
+            }
         }
 
         void Retry()

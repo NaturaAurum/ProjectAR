@@ -26,3 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Marbles/Scenes/InGame.unity
     guid: 94616b2194dea48139e0975ea444e734
+  - enabled: 1
+    path: Assets/Marbles/Scenes/Menu.unity
+    guid: a0d607b7d9ebd4c3886a422c5008d200
+  - enabled: 1
+    path: Assets/Marbles/Scenes/BaseScene.unity
+    guid: f25a309dc28fd42e498577b7683322ca
