@@ -177,6 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerCount: 1
   gameMode: 0
+  gameType: 0
 --- !u!4 &1354699725
 Transform:
   m_ObjectHideFlags: 0

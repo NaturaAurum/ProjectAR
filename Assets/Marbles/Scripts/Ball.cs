@@ -7,6 +7,7 @@ public class Ball : MonoBehaviour
     private Rigidbody ballRig;
 
     public float GravityScale = -0.05f;
+    public float BallMass = 1f;
 
     private int bounceCount = 0;
     private bool bounced = false;
@@ -21,15 +22,17 @@ public class Ball : MonoBehaviour
     public void Throw( Vector3 velocity )
     {
         var calculatedVelocity = velocity + transform.forward;
-        ballRig.AddForce(calculatedVelocity, ForceMode.Impulse);
+        ballRig.velocity = calculatedVelocity / 3f;
         ballRig.isKinematic = false;
         transform.SetParent( null );
     }
 
     private void Update()
     {
-        var gravity = new Vector3( 0, GravityScale, 0 );
-        ballRig.AddForce( gravity * ballRig.mass );
+        Debug.Log( GravityScale * BallMass );
+        var gravity = new Vector3( 0, GravityScale * BallMass, 0 );
+        ballRig.AddForce( gravity );
+        ballRig.mass = BallMass;
 
         // 멈춘걸로 본다.
         if (ballRig.velocity.magnitude <= 0.005f)

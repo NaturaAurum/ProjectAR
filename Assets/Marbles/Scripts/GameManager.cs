@@ -67,11 +67,16 @@ public class GameManager : Initializable
     public override void Initalize()
     {
         arSession = UnityARSessionNativeInterface.GetARSessionNativeInterface();
-        //UnityARSessionNativeInterface.ARAnchorAddedEvent += AR_AnchorAdded;
+        Installer.GetInstance<BallManager>( this, GetBallManager );
+    }
 
-        //ChangeGameState( State.Play );
-        ballManager = Installer.GetInstance<BallManager>();        
-        Installer.GetInstance<BallManager>().CreateBall();
+    private void GetBallManager(BallManager mgr)
+    {
+        if(mgr != null)
+        {
+            ballManager = mgr;
+            mgr.CreateBall();
+        }
     }
 
     void AR_AnchorAdded( ARPlaneAnchor anchor )

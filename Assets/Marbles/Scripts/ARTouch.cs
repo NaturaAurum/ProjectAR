@@ -30,9 +30,9 @@ public class ARTouch : Initializable
     public Vector3 GetPosition(Vector3 touchPosition)
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
-        return GetWorldPositionOnPlane(touchPosition, Camera.main.nearClipPlane + 0.05f);
+        return GetWorldPositionOnPlane(touchPosition, Config.MinimumRenderingDistance);
 #else
-        var pos = new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane + 0.05f);
+        var pos = new Vector3(touchPosition.x, touchPosition.y, Config.MinimumRenderingDistance);
         return pos;
 #endif
     }

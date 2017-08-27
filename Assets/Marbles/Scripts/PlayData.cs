@@ -4,9 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerData{
+    public int Team;
 	public string Name;
 	public int Score;
 	public int Turn;
+
+    public static PlayerData[] CreateDataWithCount(int count )
+    {
+        List<PlayerData> list = new List<PlayerData>();
+        for(int i = 0; i < count; ++i)
+        {
+            list.Add( new PlayerData() );
+        }
+
+        return list.ToArray();
+    }
 }
 
 public class PlayData : Initializable

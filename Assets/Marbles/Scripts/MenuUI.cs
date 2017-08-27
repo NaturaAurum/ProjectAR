@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class MenuUI : MonoBehaviour
 {
-
     public CustomButton singleButton;
     public CustomButton multiButton;
     public GameObject MultiOption;
@@ -73,8 +72,11 @@ public class MenuUI : MonoBehaviour
     private void SelectMulti(GameObject sender)
     {
         var number = int.Parse(sender.name);
+        dataInstance.Players.Clear();
+        var datas = PlayerData.CreateDataWithCount( number );
+        dataInstance.Players.AddRange( datas );
         //dataInstance.PlayerCount = number;
-        if(number == 2)
+        if (number == 2)
         {
             dataInstance.gameMode = PlayData.GameMode.OneVsOne;
         }
