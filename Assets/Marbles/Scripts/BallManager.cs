@@ -14,6 +14,10 @@ public class BallManager : Initializable
 
     public override object Instance { get { return this; } }
 
+    public override int GetOrder{
+        get{return 1;}
+    }
+
     public override void Initalize()
     {
         //EventManager.Listen(EventMessage.Thorwed,)

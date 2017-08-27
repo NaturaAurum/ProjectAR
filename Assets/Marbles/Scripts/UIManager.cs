@@ -37,13 +37,14 @@ namespace Assets.Marbles.Scripts
             retryBtn.onClick.AddListener(Retry);
             menuBtn.onClick.AddListener(GotoMenu);
 
-            EventManager.Listen(EventMessage.ChangeGameState, OnGameStateChanged);
+            
 
             gameManager = Installer.GetInstance<GameManager>();
 
         }
         private void Awake()
         {
+            EventManager.Listen(EventMessage.ChangeGameState, OnGameStateChanged);
             if (MultipleUIMode)
             {
                 if (horizontalLayoutGroup == null)
@@ -86,7 +87,7 @@ namespace Assets.Marbles.Scripts
 
         void GotoMenu()
         {
-
+            Fader.Instance.FadeIn(Config.FadeInTime).LoadLevel("Menu").FadeOut(Config.FadeOutTime);
         }
 
         private void UI_On()

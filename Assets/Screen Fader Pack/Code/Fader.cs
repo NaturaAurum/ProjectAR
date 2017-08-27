@@ -201,7 +201,7 @@ public class Fader : MonoBehaviour, IFader
         return Instance;
     }
 
-    public IFader LoadLevel(int index, LoadSceneMode mode, bool unloadPrev = true)
+    public IFader LoadLevel(int index, LoadSceneMode mode, bool unloadPrev = false)
     {
         AddTask(new FaderTask()
         {
@@ -212,7 +212,7 @@ public class Fader : MonoBehaviour, IFader
         return instance;
     }
 
-    public IFader LoadLevel(string name, LoadSceneMode mode, bool unloadPrev = true)
+    public IFader LoadLevel(string name, LoadSceneMode mode, bool unloadPrev = false)
     {
         AddTask(new FaderTask()
         {
@@ -623,8 +623,8 @@ public interface IFader
     /// <param name="name">Level name</param>
     IFader LoadLevel(string name);
 
-    IFader LoadLevel(int index, LoadSceneMode mode, bool unloadPrev = true);
-    IFader LoadLevel(string name, LoadSceneMode mode, bool unloadPrev = true);
+    IFader LoadLevel(int index, LoadSceneMode mode, bool unloadPrev = false);
+    IFader LoadLevel(string name, LoadSceneMode mode, bool unloadPrev = false);
     /// <summary>
     /// Change color of fading
     /// </summary>

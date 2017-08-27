@@ -13,11 +13,19 @@ public class GameManager : Initializable
 
     public override object Instance { get { return this; } }
 
+    public override int GetOrder{
+        get{return 2;}
+    }
+
     private UnityARSessionNativeInterface arSession = null;
+
+    private string targetScoreFormat = "Score {0} / {1}";
+    private string scoreFormat = "Score {0}";
 
     public enum State
     {
         Play,
+        Clear,
         GameOver,
     }
 
@@ -62,10 +70,8 @@ public class GameManager : Initializable
         //UnityARSessionNativeInterface.ARAnchorAddedEvent += AR_AnchorAdded;
 
         //ChangeGameState( State.Play );
-         ballManager = Installer.GetInstance<BallManager>();        
+        ballManager = Installer.GetInstance<BallManager>();        
         Installer.GetInstance<BallManager>().CreateBall();
-        ChangeGameState( State.Play );
-        
     }
 
     void AR_AnchorAdded( ARPlaneAnchor anchor )
@@ -74,14 +80,14 @@ public class GameManager : Initializable
         UnityARSessionNativeInterface.ARAnchorAddedEvent -= AR_AnchorAdded;
     }
 
-    private void Awake()
-    {
+    // private void Awake()
+    // {
         
-    }
+    // }
 
     void Start()
     {
-        //Installer.GetInstance<FeedManager>().CreateFeed();
+        ChangeGameState( State.Play );
     }
 
     public void SetTurn()
@@ -128,5 +134,11 @@ public class GameManager : Initializable
             // Game Over
             ChangeGameState( State.GameOver );
         }
+
+        #if UNITY_EDITOR
+        if(Input.GetKeyDown(KeyCode.M)){
+            Fader.Instance.FadeIn(0.6f).LoadLevel("Menu").FadeOut(0.6f);
+        }
+        #endif
     }
 }

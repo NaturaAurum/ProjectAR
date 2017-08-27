@@ -15,6 +15,10 @@ public class PlayData : Initializable
 
     public override object Instance { get { return this; } }
 
+	public override int GetOrder{
+		get { return 0;}
+	}
+
     public override void Initalize()
     {
         DontDestroyOnLoad(gameObject);
@@ -24,10 +28,18 @@ public class PlayData : Initializable
 
 	public int PlayerCount = 1;
 	public GameMode gameMode;
+	public GameType gameType;
 
 	public enum GameMode{
 		Single,
 		OneVsOne,
 		TwoVsTwo
+	}
+
+	public enum GameType{
+		SINGLECHALLENGE,
+		SUM,
+		ATTACK,
+		DAYLYCHALLENGE,
 	}
 }

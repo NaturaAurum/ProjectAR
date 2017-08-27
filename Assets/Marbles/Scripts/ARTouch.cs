@@ -16,6 +16,11 @@ public class ARTouch : Initializable
         get { return this; }
     }
 
+    public override int GetOrder
+    {
+        get { return 0; }
+    }
+
     public delegate void TouchEvent(Vector3 touchPosition);
 
     public event TouchEvent OnTouchDown;

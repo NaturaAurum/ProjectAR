@@ -67,7 +67,7 @@ public class MenuUI : MonoBehaviour
 
     void LoadIngameScene(){
         //Fader.Instance.FadeIn(0.6f).LoadLevel("InGame").FadeOut(0.6f);
-        Fader.Instance.FadeIn(0.6f).LoadLevel("InGame").FadeOut(0.6f);
+        Fader.Instance.FadeIn(Config.FadeInTime).LoadLevel("InGame").FadeOut(Config.FadeOutTime);
     }
 
     private void SelectMulti(GameObject sender)

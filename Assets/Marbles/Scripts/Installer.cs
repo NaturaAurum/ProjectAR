@@ -26,17 +26,17 @@ public class Installer : MonoBehaviour
         // }
         DontDestroyOnLoad(gameObject);
 
-        //SceneManager.sceneLoaded += OnNewSceneLoaded;
+        SceneManager.sceneLoaded += OnNewSceneLoaded;
         //SceneManager.activeSceneChanged += ActiveSceneChanged;
     }
 
     /// <summary>
     /// This function is called when the object becomes enabled and active.
     /// </summary>
-    void OnEnable()
-    {
-        Load();
-    }
+    // void OnEnable()
+    // {
+    //     Load();
+    // }
 
     private void ActiveSceneChanged(Scene args0, Scene args1)
     {
@@ -46,12 +46,21 @@ public class Installer : MonoBehaviour
     private void Load()
     {
         var initObjects = FindObjectsOfType<Initializable>();
-        for (int i = 0; i < initObjects.Length; ++i)
+        List<Initializable> sortedInitObjects = new List<Initializable>(initObjects);
+        foreach(var initObject in initObjects){
+            var order = initObject.GetOrder;
+            if(order == -1){
+                order = sortedInitObjects.Count - 2;
+            }
+            sortedInitObjects.Remove(initObject);
+            sortedInitObjects.Insert(order, initObject);
+        }
+        for (int i = 0; i < sortedInitObjects.Count; ++i)
         {
-            if (!typeList.ContainsKey(initObjects[i].Type)) 
+            if (!typeList.ContainsKey(sortedInitObjects[i].Type)) 
             { 
-                initObjects[i].Initalize();
-                typeList.Add(initObjects[i].Type, initObjects[i].Instance); 
+                sortedInitObjects[i].Initalize();
+                typeList.Add(sortedInitObjects[i].Type, sortedInitObjects[i].Instance); 
             }
         }
     }

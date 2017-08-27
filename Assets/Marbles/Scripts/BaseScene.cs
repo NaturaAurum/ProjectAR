@@ -10,6 +10,6 @@ public class BaseScene : MonoBehaviour
 	/// </summary>
 	void Start()
 	{
-		Fader.Instance.FadeIn(0.6f).LoadLevel("Menu").FadeOut(0.6f);
+		Fader.Instance.FadeIn(Config.FadeInTime).LoadLevel("Menu").FadeOut(Config.FadeOutTime);
 	}
 }
