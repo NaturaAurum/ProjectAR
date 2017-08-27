@@ -103,7 +103,7 @@ public class GameBoard : MonoBehaviour
     void Awake()
     {
         if(Prefix == "*"){
-            Prefix = "X";
+            Prefix = "x";
         }
         SetScore();
         SetColor();

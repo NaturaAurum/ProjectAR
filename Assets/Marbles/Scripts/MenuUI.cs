@@ -71,8 +71,8 @@ public class MenuUI : MonoBehaviour
 
     private void SelectMulti(GameObject sender)
     {
-        var number = int.Parse(sender.name);
-        dataInstance.Players.Clear();
+        var number = int.Parse( sender.name );
+        dataInstance.Players = new List<PlayerData>();
         var datas = PlayerData.CreateDataWithCount( number );
         dataInstance.Players.AddRange( datas );
         //dataInstance.PlayerCount = number;

@@ -77,6 +77,11 @@ namespace Assets.Marbles.Scripts
 
                 horizontalLayoutGroup.SetLayoutHorizontal();
             }
+
+            if (!gameOverObjectParent)
+            {
+                gameOverObjectParent = transform.Find( "GameOver" ).gameObject;
+            }
         }
 
         void Retry()
@@ -97,6 +102,10 @@ namespace Assets.Marbles.Scripts
 
         private void UI_Off()
         {
+            if (!gameOverObjectParent)
+            {
+                gameOverObjectParent = transform.Find( "GameOver" ).gameObject;
+            }
             gameOverObjectParent.SetActive(false);
         }
 

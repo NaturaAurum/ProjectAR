@@ -57,7 +57,13 @@ public class MapData : Initializable
 
     public override object Instance { get { return this; } }
 
-    public override void Initalize()
+    //public override void Initalize()
+    //{
+    //    GetGoogleSheet();
+    //    //GetMapColorData();
+    //}
+
+    private void Awake()
     {
         GetGoogleSheet();
         GetMapColorData();

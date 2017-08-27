@@ -18,9 +18,9 @@ public class Stage : MonoBehaviour
     void Awake()
     {
         UnityARSessionNativeInterface.ARAnchorAddedEvent += ARAnchorAdded;
-        for(int i = 0; i <transform.childCount; ++i){
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
+        //for(int i = 0; i <transform.childCount; ++i){
+        //    transform.GetChild(i).gameObject.SetActive(false);
+        //}
     }
 
     void ARAnchorAdded(ARPlaneAnchor anchor)
