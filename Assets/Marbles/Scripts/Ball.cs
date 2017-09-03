@@ -21,67 +21,75 @@ public class Ball : MonoBehaviour
     }
 
 
-    public void Throw( Vector3 velocity )
+    public void Throw(Vector3 velocity)
     {
         var calculatedVelocity = velocity + transform.forward;
         ballRig.velocity = calculatedVelocity / 3f;
         ballRig.isKinematic = false;
-        transform.SetParent( null );
+        transform.SetParent(null);
         thrown = true;
     }
 
     private void Update()
     {
+        if (!thrown)
+        {
+            return;
+        }
         //Debug.Log( GravityScale * BallMass );
-        var gravity = new Vector3( 0, GravityScale * BallMass, 0 );
-        ballRig.AddForce( gravity );
+        var gravity = new Vector3(0, GravityScale * BallMass, 0);
+        ballRig.AddForce(gravity);
         ballRig.mass = BallMass;
 
         // 멈춘걸로 본다.
-        if (ballRig.velocity.magnitude <= 0.005f && thrown)
+        if (ballRig.velocity.magnitude <= 0.005f)
         {
             RaycastHit hitInfo;
-            if (Physics.Raycast( transform.position, Vector3.down, out hitInfo ))
+            if (Physics.Raycast(transform.position, Vector3.down, out hitInfo))
             {
-                if (hitInfo.collider.name.Contains( "GameBoard" ))
+                if (hitInfo.collider.name.Contains("GameBoard"))
                 {
                     var board = hitInfo.transform.GetComponent<GameBoard>();
-                    Installer.GetInstance<GameManager>().SetScore( board.Score );
+                    Installer.GetInstance<GameManager>().SetScore(board.Score);
 
                     Installer.GetInstance<BallManager>().CreateBall();
                     Installer.GetInstance<GameManager>().SetTurn();
-                    Destroy( gameObject );
+                    Destroy(gameObject);
                 }
             }
         }
 
         if (ballRig.velocity.magnitude <= 0.07f)
         {
-            ballRig.AddForce( ballRig.mass * -ballRig.velocity );
+            ballRig.AddForce(ballRig.mass * -ballRig.velocity);
         }
     }
 
-    private void OnCollisionEnter( Collision collision )
+    private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name.Contains( "GameBoard" ) && !bounced
-            && ballRig.velocity.magnitude >= 0.3f )
+        if (!thrown)
+        {
+            return;
+        }
+        if (collision.gameObject.name.Contains("GameBoard") && !bounced
+            && ballRig.velocity.magnitude >= 0.3f)
         {
             bounced = true;
             bounceCount++;
-            var reflect = Vector3.Reflect( ballRig.velocity, Vector3.up );
+            var reflect = Vector3.Reflect(ballRig.velocity, Vector3.up);
             ballRig.velocity = reflect.normalized * ballRig.velocity.magnitude * 0.4f;
         }
-        if (collision.gameObject.name.Contains( "Destroy" ))
+        if (collision.gameObject.name.Contains("Destroy"))
         {
             Installer.GetInstance<BallManager>().CreateBall();
             Installer.GetInstance<GameManager>().SetTurn();
-            Destroy( gameObject );
+            Destroy(gameObject);
         }
     }
 
-    private void OnCollisionExit( Collision collision )
+    private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.name.Contains( "GameBoard" ) && bounced)
+        if (collision.gameObject.name.Contains("GameBoard") && bounced)
         {
             bounced = false;
         }

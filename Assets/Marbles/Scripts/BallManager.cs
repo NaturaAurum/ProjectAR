@@ -87,14 +87,17 @@ public class BallManager : Initializable
             {
                 var touchWorldPoint = Camera.main.ScreenToWorldPoint(currentTouchPosition);
                 var result = touchWorldPoint + (cameraForward.normalized * Config.MinimumRenderingDistance);
+                Debug.Log("touch result : " + result);
                 touchVelocity = ((result - prevTouchPosition)) / Time.deltaTime;
                 prevTouchPosition = result;
                 createdBall.position = Vector3.MoveTowards(createdBall.position, result, 0.65f * Time.deltaTime);
             }
-            else{
-                createdBall.position = ballPosition + onTouchUpPosition;
+            else
+            {
+                var worldTouchUpPosotion = Camera.main.ScreenToWorldPoint(onTouchUpPosition);
+                var result = worldTouchUpPosotion + (cameraForward.normalized * Config.MinimumRenderingDistance);
+                createdBall.position = ballPosition + result;
             }
-            //createdBall.position = ballPosition;
         }
     }
 
@@ -113,16 +116,12 @@ public class BallManager : Initializable
         {
             return;
         }
-        touchPosition.z = Config.MinimumRenderingDistance;
-        var worldTouchPosition = Camera.main.ScreenToWorldPoint(touchPosition);
-        var dis = (worldTouchPosition - createdBall.position).magnitude;
-        if (dis <= createdBall.localScale.x)
-        {
-            touched = true;
-            onTouchedPosition = touchPosition;
-            touchPosition.z = Config.MinimumRenderingDistance;
-            prevTouchPosition = Camera.main.ScreenToWorldPoint(touchPosition);
-        }
+        //touched = true;
+        onTouchedPosition = touchPosition;
+        //touchPosition.z = Config.MinimumRenderingDistance;
+        prevTouchPosition = Camera.main.ScreenToWorldPoint(touchPosition);
+
+        Debug.Log( "Ball Pos : " + _ballPosition);
     }
 
     private void OnTouching(Vector3 touchPosition)
@@ -166,7 +165,9 @@ public class BallManager : Initializable
 
         var position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, Config.MinimumRenderingDistance)); // AR Kit 업데이트 하면서 카메라가 바뀐듯 하다?
         createdBall = Instantiate(BallPrefab, position, Quaternion.identity).transform;
+#if !UNITY_EDITOR
         createdBall.position = _ballPosition;
+#endif
         ball = createdBall.GetComponent<Ball>();
     }
 }
