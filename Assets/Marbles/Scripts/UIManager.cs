@@ -44,7 +44,7 @@ namespace Assets.Marbles.Scripts
         }
         private void Awake()
         {
-            EventManager.Listen(EventMessage.ChangeGameState, OnGameStateChanged);
+            
             if (MultipleUIMode)
             {
                 if (horizontalLayoutGroup == null)
@@ -82,6 +82,23 @@ namespace Assets.Marbles.Scripts
             {
                 gameOverObjectParent = transform.Find( "GameOver" ).gameObject;
             }
+        }
+
+        /// <summary>
+        /// This function is called when the object becomes enabled and active.
+        /// </summary>
+        void OnEnable()
+        {
+            EventManager.Listen(EventMessage.ChangeGameState, OnGameStateChanged);
+        }
+        
+        /// <summary>
+        /// This function is called when the behaviour becomes disabled or inactive.
+        /// </summary>
+        void OnDisable()
+        {
+            EventManager.Remove(EventMessage.ChangeGameState, OnGameStateChanged);
+            Installer.RemoveInstance<UIManager>();
         }
 
         void Retry()

@@ -89,6 +89,10 @@ public class Installer : MonoBehaviour
         return typeList[ key ] as T;
     }
 
+    private void Remove<T>(){
+        typeList.Remove(typeof(T));
+    }
+
     private IEnumerator GetInstanceWithType<T>( Action<T> callback ) where T : Initializable
     {
         while (!typeList.ContainsKey( typeof( T ) ))
@@ -114,5 +118,9 @@ public class Installer : MonoBehaviour
     public static void GetInstance<T>( MonoBehaviour owner, Action<T> callback ) where T : Initializable
     {
         owner.StartCoroutine( instance.GetInstanceWithType<T>( callback ) );
+    }
+
+    public static void RemoveInstance<T>(){
+        instance.Remove<T>();
     }
 }

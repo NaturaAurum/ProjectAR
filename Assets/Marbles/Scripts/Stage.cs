@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.XR.iOS;
 using UnityEngine.UI;
 using System.Linq;
+using ProjectAR.Assets.Marbles.Scripts;
 
-public class Stage : MonoBehaviour
+public class Stage : IScalable
 {
 
     public float HeightMax = 2.0f;
@@ -21,6 +22,7 @@ public class Stage : MonoBehaviour
         //for(int i = 0; i <transform.childCount; ++i){
         //    transform.GetChild(i).gameObject.SetActive(false);
         //}
+        firstPlanePos = new Vector3(100f, 100f, 100f);
     }
 
     void ARAnchorAdded(ARPlaneAnchor anchor)
@@ -72,5 +74,10 @@ public class Stage : MonoBehaviour
             stagePos.y += Mathf.Lerp(0, HeightMax, uiSlider.value);
             transform.position = stagePos;
         }
+    }
+
+    public override void ApplyWolrdScale()
+    {
+        transform.localScale *= Config.WorldScale;
     }
 }

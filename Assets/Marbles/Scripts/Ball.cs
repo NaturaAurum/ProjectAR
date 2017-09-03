@@ -12,6 +12,8 @@ public class Ball : MonoBehaviour
     private int bounceCount = 0;
     private bool bounced = false;
 
+    private bool thrown = false;
+
     private void Awake()
     {
         ballRig = GetComponent<Rigidbody>();
@@ -25,17 +27,18 @@ public class Ball : MonoBehaviour
         ballRig.velocity = calculatedVelocity / 3f;
         ballRig.isKinematic = false;
         transform.SetParent( null );
+        thrown = true;
     }
 
     private void Update()
     {
-        Debug.Log( GravityScale * BallMass );
+        //Debug.Log( GravityScale * BallMass );
         var gravity = new Vector3( 0, GravityScale * BallMass, 0 );
         ballRig.AddForce( gravity );
         ballRig.mass = BallMass;
 
         // 멈춘걸로 본다.
-        if (ballRig.velocity.magnitude <= 0.005f)
+        if (ballRig.velocity.magnitude <= 0.005f && thrown)
         {
             RaycastHit hitInfo;
             if (Physics.Raycast( transform.position, Vector3.down, out hitInfo ))

@@ -9,7 +9,7 @@ PlayerSettings:
   defaultScreenOrientation: 4
   targetDevice: 2
   useOnDemandResources: 0
-  accelerometerFrequency: 100
+  accelerometerFrequency: 60
   companyName: Fiveminlab
   productName: ARMarbles
   defaultCursor: {fileID: 0}
@@ -69,7 +69,7 @@ PlayerSettings:
   runInBackground: 1
   captureSingleScreen: 0
   muteOtherAudioSources: 0
-  Prepare IOS For Recording: 0
+  Prepare IOS For Recording: 1
   Force IOS Speakers When Recording: 0
   submitAnalytics: 1
   usePlayerLog: 1
@@ -147,7 +147,7 @@ PlayerSettings:
     iOS: com.fiveminlab.armarbles
     tvOS: com.Company.ProductName
   buildNumber:
-    iOS: 0
+    iOS: 4
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
